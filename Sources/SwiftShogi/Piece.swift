@@ -23,3 +23,11 @@ public struct Piece {
         self.color = color
     }
 }
+
+extension Piece.Kind: Hashable {}
+extension Piece: Hashable {
+    public func hash(into hasher: inout Hasher) {
+        hasher.combine(kind)
+        hasher.combine(color)
+    }
+}
