@@ -18,6 +18,8 @@ extension Game {
 
         let sourcePiece = remove(from: move.source)
         insert(sourcePiece, to: move.destination)
+
+        color.toggle()
     }
 
     private mutating func remove(from source: Move.Source) -> Piece {
