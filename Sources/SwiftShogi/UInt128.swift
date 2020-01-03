@@ -1,6 +1,6 @@
 struct UInt128 {
-    var upperBits: UInt64
-    var lowerBits: UInt64
+    private(set) var upperBits: UInt64
+    private(set) var lowerBits: UInt64
 }
 
 extension UInt128: ExpressibleByIntegerLiteral {
