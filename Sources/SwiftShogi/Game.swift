@@ -45,7 +45,40 @@ extension Game {
 
 extension Game {
 
+    /// An error in move validation.
+    public enum MoveValidationError: Error {
+        case boardPieceDoesNotExist
+        case capturedPieceDoesNotExist
+        case invalidPieceColor
+        case friendlyPieceAlreadyExists
+    }
+
     /// Validates `move`.
     public func validate(_ move: Move) throws {
+        try validateSource(move.source)
+    }
+
+    private func validateSource(_ source: Move.Source) throws {
+        guard let sourcePiece = piece(of: source) else {
+            switch source {
+            case .board:
+                throw MoveValidationError.boardPieceDoesNotExist
+            case .capturedPiece:
+                throw MoveValidationError.capturedPieceDoesNotExist
+            }
+        }
+
+        guard sourcePiece.color == color else {
+            throw MoveValidationError.invalidPieceColor
+        }
+    }
+
+    private func piece(of source: Move.Source) -> Piece? {
+        switch source {
+        case let .board(square):
+            return board[square]
+        case let .capturedPiece(piece):
+            return capturedPieces.contains(piece) ? piece : nil
+        }
     }
 }

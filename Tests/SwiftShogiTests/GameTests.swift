@@ -2,7 +2,7 @@ import XCTest
 @testable import SwiftShogi
 
 final class GameTests: XCTestCase {
-    func testPerformMoveFromBoard() {
+    func testPerformFromBoard() {
         let piece = Piece(kind: .gold, color: .black)
         let board = Board(pieces: [.oneA: piece])
         var game = Game(board: board)
@@ -20,7 +20,7 @@ final class GameTests: XCTestCase {
         XCTAssertTrue(game.capturedPieces.isEmpty)
     }
 
-    func testPerformMoveFromCapturedPiece() {
+    func testPerformFromCapturedPiece() {
         let piece = Piece(kind: .gold, color: .black)
         var game = Game(capturedPieces: [piece])
         XCTAssertNil(game.board[.oneA])
@@ -33,6 +33,38 @@ final class GameTests: XCTestCase {
         XCTAssertEqual(game.board[.oneA], piece)
         XCTAssertEqual(game.color, .white)
         XCTAssertTrue(game.capturedPieces.isEmpty)
+    }
+
+    func testValidateWithBoardPieceDoesNotExistMoveError() {
+        let board = Board(pieces: [:])
+        let game = Game(board: board)
+
+        let move = Move(source: .board(.oneA), destination: .board(.oneB))
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .boardPieceDoesNotExist)
+        }
+    }
+
+    func testValidateWithCapturedPieceDoesNotExistMoveError() {
+        let piece = Piece(kind: .gold, color: .black)
+        let game = Game(capturedPieces: [])
+
+        let move = Move(source: .capturedPiece(piece), destination: .board(.oneA))
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .capturedPieceDoesNotExist)
+        }
+    }
+
+    func testValidateWithInvalidPieceColorMoveError() {
+        let square = Square.oneA
+        let piece = Piece(kind: .gold, color: .black)
+        let board = Board(pieces: [square: piece])
+        let game = Game(board: board, color: .white)
+
+        let move = Move(source: .board(square), destination: .board(.oneB))
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .invalidPieceColor)
+        }
     }
 }
 

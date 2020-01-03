@@ -33,8 +33,11 @@ extension GameTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__GameTests = [
-        ("testPerformMoveFromBoard", testPerformMoveFromBoard),
-        ("testPerformMoveFromCapturedPiece", testPerformMoveFromCapturedPiece),
+        ("testPerformFromBoard", testPerformFromBoard),
+        ("testPerformFromCapturedPiece", testPerformFromCapturedPiece),
+        ("testValidateWithBoardPieceDoesNotExistMoveError", testValidateWithBoardPieceDoesNotExistMoveError),
+        ("testValidateWithCapturedPieceDoesNotExistMoveError", testValidateWithCapturedPieceDoesNotExistMoveError),
+        ("testValidateWithInvalidPieceColorMoveError", testValidateWithInvalidPieceColorMoveError),
     ]
 }
 
