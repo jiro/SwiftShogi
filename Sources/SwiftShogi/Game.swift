@@ -56,6 +56,7 @@ extension Game {
     /// Validates `move`.
     public func validate(_ move: Move) throws {
         try validateSource(move.source)
+        try validateDestination(move.destination)
     }
 
     private func validateSource(_ source: Move.Source) throws {
@@ -73,12 +74,26 @@ extension Game {
         }
     }
 
+    private func validateDestination(_ destination: Move.Destination) throws {
+        let destinationPiece = piece(of: destination)
+        guard destinationPiece?.color != color else {
+            throw MoveValidationError.friendlyPieceAlreadyExists
+        }
+    }
+
     private func piece(of source: Move.Source) -> Piece? {
         switch source {
         case let .board(square):
             return board[square]
         case let .capturedPiece(piece):
             return capturedPieces.contains(piece) ? piece : nil
+        }
+    }
+
+    private func piece(of destination: Move.Destination) -> Piece? {
+        switch destination {
+        case let .board(square):
+            return board[square]
         }
     }
 }

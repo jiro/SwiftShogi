@@ -35,7 +35,7 @@ final class GameTests: XCTestCase {
         XCTAssertTrue(game.capturedPieces.isEmpty)
     }
 
-    func testValidateWithBoardPieceDoesNotExistMoveError() {
+    func testValidateWithBoardPieceDoesNotExistMoveValidationError() {
         let board = Board(pieces: [:])
         let game = Game(board: board)
 
@@ -45,7 +45,7 @@ final class GameTests: XCTestCase {
         }
     }
 
-    func testValidateWithCapturedPieceDoesNotExistMoveError() {
+    func testValidateWithCapturedPieceDoesNotExistMoveValidationError() {
         let piece = Piece(kind: .gold, color: .black)
         let game = Game(capturedPieces: [])
 
@@ -55,15 +55,28 @@ final class GameTests: XCTestCase {
         }
     }
 
-    func testValidateWithInvalidPieceColorMoveError() {
-        let square = Square.oneA
-        let piece = Piece(kind: .gold, color: .black)
-        let board = Board(pieces: [square: piece])
+    func testValidateWithInvalidPieceColorMoveValidationError() {
+        let board = Board(pieces: [
+            .oneA: Piece(kind: .gold, color: .black)
+        ])
         let game = Game(board: board, color: .white)
 
-        let move = Move(source: .board(square), destination: .board(.oneB))
+        let move = Move(source: .board(.oneA), destination: .board(.oneB))
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .invalidPieceColor)
+        }
+    }
+
+    func testValidateWithFriendlyPieceAlreadyExistsMoveValidationError() {
+        let board = Board(pieces: [
+            .oneA: Piece(kind: .gold, color: .black),
+            .oneB: Piece(kind: .king, color: .black)
+        ])
+        let game = Game(board: board)
+
+        let move = Move(source: .board(.oneA), destination: .board(.oneB))
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .friendlyPieceAlreadyExists)
         }
     }
 }

@@ -35,9 +35,10 @@ extension GameTests {
     static let __allTests__GameTests = [
         ("testPerformFromBoard", testPerformFromBoard),
         ("testPerformFromCapturedPiece", testPerformFromCapturedPiece),
-        ("testValidateWithBoardPieceDoesNotExistMoveError", testValidateWithBoardPieceDoesNotExistMoveError),
-        ("testValidateWithCapturedPieceDoesNotExistMoveError", testValidateWithCapturedPieceDoesNotExistMoveError),
-        ("testValidateWithInvalidPieceColorMoveError", testValidateWithInvalidPieceColorMoveError),
+        ("testValidateWithBoardPieceDoesNotExistMoveValidationError", testValidateWithBoardPieceDoesNotExistMoveValidationError),
+        ("testValidateWithCapturedPieceDoesNotExistMoveValidationError", testValidateWithCapturedPieceDoesNotExistMoveValidationError),
+        ("testValidateWithFriendlyPieceAlreadyExistsMoveValidationError", testValidateWithFriendlyPieceAlreadyExistsMoveValidationError),
+        ("testValidateWithInvalidPieceColorMoveValidationError", testValidateWithInvalidPieceColorMoveValidationError),
     ]
 }
 
