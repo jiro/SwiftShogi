@@ -1,6 +1,8 @@
 import XCTest
+
 import SwiftShogiTests
 
 var tests = [XCTestCaseEntry]()
-tests += SwiftShogiTests.allTests()
+tests += SwiftShogiTests.__allTests()
+
 XCTMain(tests)
