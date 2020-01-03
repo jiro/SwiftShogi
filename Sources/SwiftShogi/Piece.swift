@@ -24,6 +24,29 @@ public struct Piece {
     }
 }
 
+extension Piece.Kind: CaseIterable {
+    public static let allCases: [Self] = [
+        .pawn(.normal), .pawn(.promoted),
+        .lance(.normal), .lance(.promoted),
+        .knight(.normal), .knight(.promoted),
+        .silver(.normal), .silver(.promoted),
+        .gold,
+        .bishop(.normal), .bishop(.promoted),
+        .rook(.normal), .rook(.promoted),
+        .king,
+    ]
+}
+
+extension Piece: CaseIterable {
+    public static let allCases: [Self] = allKindColorPairs.map(Self.init)
+
+    private static var allKindColorPairs: [(Kind, Color)] {
+        Kind.allCases.flatMap { kind in
+            Color.allCases.map { color in (kind, color) }
+        }
+    }
+}
+
 extension Piece.Kind: Hashable {}
 extension Piece: Hashable {
     public func hash(into hasher: inout Hasher) {
