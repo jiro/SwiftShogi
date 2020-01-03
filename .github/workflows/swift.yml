@@ -1,0 +1,15 @@
+name: Swift
+on: [push]
+jobs:
+  test-mac:
+    runs-on: macOS-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: swift test
+  test-linux:
+    container: 
+      image: vapor/swift:5.1-bionic
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v1
+    - run: swift test
