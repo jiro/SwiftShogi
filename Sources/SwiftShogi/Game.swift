@@ -51,12 +51,17 @@ extension Game {
         case capturedPieceDoesNotExist
         case invalidPieceColor
         case friendlyPieceAlreadyExists
+        case pieceAlreadyPromoted
+        case pieceCannotPromote
     }
 
     /// Validates `move`.
     public func validate(_ move: Move) throws {
         try validateSource(move.source)
         try validateDestination(move.destination)
+        if move.shouldPromote {
+            try validatePromotion(source: move.source, destination: move.destination)
+        }
     }
 
     private func validateSource(_ source: Move.Source) throws {
@@ -75,9 +80,23 @@ extension Game {
     }
 
     private func validateDestination(_ destination: Move.Destination) throws {
-        let destinationPiece = piece(of: destination)
-        guard destinationPiece?.color != color else {
+        // If the destination piece does not exist, no validation is required
+        guard let destinationPiece = piece(of: destination) else { return }
+
+        guard destinationPiece.color != color else {
             throw MoveValidationError.friendlyPieceAlreadyExists
+        }
+    }
+
+    private func validatePromotion(source: Move.Source, destination: Move.Destination) throws {
+        // If the source piece does not exist, no validation is required
+        guard let sourcePiece = piece(of: source) else { return }
+
+        guard !sourcePiece.isPromoted else {
+            throw MoveValidationError.pieceAlreadyPromoted
+        }
+        guard sourcePiece.canPromote else {
+            throw MoveValidationError.pieceCannotPromote
         }
     }
 

@@ -24,6 +24,36 @@ public struct Piece {
     }
 }
 
+extension Piece {
+    public var isPromoted: Bool {
+        switch kind {
+        case .pawn(.promoted),
+             .lance(.promoted),
+             .knight(.promoted),
+             .silver(.promoted),
+             .bishop(.promoted),
+             .rook(.promoted):
+            return true
+        default:
+            return false
+        }
+    }
+
+    public var canPromote: Bool {
+        switch kind {
+        case .pawn(.normal),
+             .lance(.normal),
+             .knight(.normal),
+             .silver(.normal),
+             .bishop(.normal),
+             .rook(.normal):
+            return true
+        default:
+            return false
+        }
+    }
+}
+
 extension Piece.Kind: CaseIterable {
     public static let allCases: [Self] = [
         .pawn(.normal), .pawn(.promoted),
@@ -38,9 +68,9 @@ extension Piece.Kind: CaseIterable {
 }
 
 extension Piece: CaseIterable {
-    public static let allCases: [Self] = allKindColorPairs.map(Self.init)
+    public static let allCases: [Self] = kindsAndColors.map(Self.init)
 
-    private static var allKindColorPairs: [(Kind, Color)] {
+    private static var kindsAndColors: [(Kind, Color)] {
         Kind.allCases.flatMap { kind in
             Color.allCases.map { color in (kind, color) }
         }

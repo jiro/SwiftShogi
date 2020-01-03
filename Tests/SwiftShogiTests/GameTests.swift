@@ -79,6 +79,30 @@ final class GameTests: XCTestCase {
             XCTAssertEqual(error as! Game.MoveValidationError, .friendlyPieceAlreadyExists)
         }
     }
+
+    func testValidateWithPieceAlreadyPromotedMoveValidationError() {
+        let board = Board(pieces: [
+            .oneA: Piece(kind: .rook(.promoted), color: .black)
+        ])
+        let game = Game(board: board)
+
+        let move = Move(source: .board(.oneA), destination: .board(.oneB), shouldPromote: true)
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .pieceAlreadyPromoted)
+        }
+    }
+
+    func testValidateWithPieceCannotPromoteMoveValidationError() {
+        let board = Board(pieces: [
+            .oneA: Piece(kind: .gold, color: .black)
+        ])
+        let game = Game(board: board)
+
+        let move = Move(source: .board(.oneA), destination: .board(.oneB), shouldPromote: true)
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .pieceCannotPromote)
+        }
+    }
 }
 
 private extension Board {
