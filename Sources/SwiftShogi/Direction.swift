@@ -25,6 +25,9 @@ extension Direction {
         return Self.allCases.first { $0.components == flippedComponents }!
     }
 
+    var containsNorth: Bool { components.contains(.north) }
+    var containsSouth: Bool { components.contains(.south) }
+
     var shift: Int {
         components.map({ $0.shift }).reduce(0, +)
     }

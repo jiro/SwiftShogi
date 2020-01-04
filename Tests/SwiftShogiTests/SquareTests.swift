@@ -2,6 +2,26 @@ import XCTest
 @testable import SwiftShogi
 
 final class SquareTests: XCTestCase {
+    func testFile() {
+        let square = Square.oneA
+        XCTAssertEqual(square.file, File.one)
+    }
+
+    func testRank() {
+        let square = Square.oneA
+        XCTAssertEqual(square.rank, Rank.a)
+    }
+
+    func testFileCases() {
+        let cases = Square.cases(at: .one)
+        XCTAssertEqual(cases, [.oneA, .oneB, .oneC, .oneD, .oneE, .oneF, .oneG, .oneH, .oneI])
+    }
+
+    func testRankCases() {
+        let cases = Square.cases(at: .a)
+        XCTAssertEqual(cases, [.oneA, .twoA, .threeA, .fourA, .fiveA, .sixA, .sevenA, .eightA, .nineA])
+    }
+
     func testPromotableCases() {
         let colors: [(color: Color, expected: [Square])] = [
             (.black, [

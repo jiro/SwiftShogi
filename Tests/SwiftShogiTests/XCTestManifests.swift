@@ -6,6 +6,8 @@ extension BitboardTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__BitboardTests = [
+        ("testAttacks", testAttacks),
+        ("testAttacksWithStoppers", testAttacksWithStoppers),
         ("testSubscript", testSubscript),
     ]
 }
@@ -72,7 +74,11 @@ extension SquareTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__SquareTests = [
+        ("testFile", testFile),
+        ("testFileCases", testFileCases),
         ("testPromotableCases", testPromotableCases),
+        ("testRank", testRank),
+        ("testRankCases", testRankCases),
     ]
 }
 
