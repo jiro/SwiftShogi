@@ -53,6 +53,8 @@ extension Game {
         case friendlyPieceAlreadyExists
         case pieceAlreadyPromoted
         case pieceCannotPromote
+        case illegalBoardPiecePromotion
+        case illegalCapturedPiecePromotion
     }
 
     /// Validates `move`.
@@ -97,6 +99,18 @@ extension Game {
         }
         guard sourcePiece.canPromote else {
             throw MoveValidationError.pieceCannotPromote
+        }
+
+        switch (source, destination) {
+        case let (.board(sourceSquare), .board(destinationSquare)):
+            let squares = Square.promotableCases(for: color)
+            guard squares.contains(sourceSquare)
+                || squares.contains(destinationSquare)
+                else {
+                    throw MoveValidationError.illegalBoardPiecePromotion
+            }
+        case (.capturedPiece, _):
+            throw MoveValidationError.illegalCapturedPiecePromotion
         }
     }
 

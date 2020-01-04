@@ -103,6 +103,28 @@ final class GameTests: XCTestCase {
             XCTAssertEqual(error as! Game.MoveValidationError, .pieceCannotPromote)
         }
     }
+
+    func testValidateWithIllegalBoardPiecePromotionMoveValidationError() {
+        let board = Board(pieces: [
+            .oneI: Piece(kind: .rook(.normal), color: .black)
+        ])
+        let game = Game(board: board)
+
+        let move = Move(source: .board(.oneI), destination: .board(.oneH), shouldPromote: true)
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .illegalBoardPiecePromotion)
+        }
+    }
+
+    func testValidateWithIllegalCapturedPiecePromotionMoveValidationError() {
+        let piece = Piece(kind: .rook(.normal), color: .black)
+        let game = Game(capturedPieces: [piece])
+
+        let move = Move(source: .capturedPiece(piece), destination: .board(.oneA), shouldPromote: true)
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .illegalCapturedPiecePromotion)
+        }
+    }
 }
 
 private extension Board {

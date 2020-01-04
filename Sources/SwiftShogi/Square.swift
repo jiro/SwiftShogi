@@ -1,4 +1,4 @@
-public enum File: Int {
+public enum File: Int, CaseIterable {
     case one
     case two
     case three
@@ -10,7 +10,7 @@ public enum File: Int {
     case nine
 }
 
-public enum Rank: Int {
+public enum Rank: Int, CaseIterable {
     case a
     case b
     case c
@@ -22,7 +22,7 @@ public enum Rank: Int {
     case i
 }
 
-public enum Square: Int {
+public enum Square: Int, CaseIterable {
     case oneA,   oneB,   oneC,   oneD,   oneE,   oneF,   oneG,   oneH,   oneI
     case twoA,   twoB,   twoC,   twoD,   twoE,   twoF,   twoG,   twoH,   twoI
     case threeA, threeB, threeC, threeD, threeE, threeF, threeG, threeH, threeI
@@ -32,4 +32,18 @@ public enum Square: Int {
     case sevenA, sevenB, sevenC, sevenD, sevenE, sevenF, sevenG, sevenH, sevenI
     case eightA, eightB, eightC, eightD, eightE, eightF, eightG, eightH, eightI
     case nineA,  nineB,  nineC,  nineD,  nineE,  nineF,  nineG,  nineH,  nineI
+}
+
+extension Square {
+    public var rank: Rank { Rank(rawValue: rawValue % Rank.allCases.count)! }
+
+    public static func promotableCases(for color: Color) -> [Self] {
+        let ranks: [Rank] = {
+            switch color {
+            case .black: return [.a, .b, .c]
+            case .white: return [.g, .h, .i]
+            }
+        }()
+        return allCases.filter { ranks.contains($0.rank) }
+    }
 }
