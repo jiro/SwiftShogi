@@ -17,6 +17,7 @@ extension BoardTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__BoardTests = [
+        ("testIsValidAttack", testIsValidAttack),
         ("testSubscript", testSubscript),
     ]
 }
