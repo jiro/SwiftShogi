@@ -11,7 +11,11 @@ final class GameTests: XCTestCase {
         XCTAssertEqual(game.color, .black)
         XCTAssertTrue(game.capturedPieces.isEmpty)
 
-        let move = Move(source: .board(.oneA), destination: .board(.oneB))
+        let move = Move(
+            source: .board(.oneA),
+            destination: .board(.oneB),
+            piece: piece
+        )
         XCTAssertNoThrow(try game.perform(move))
 
         XCTAssertNil(game.board[.oneA])
@@ -27,7 +31,11 @@ final class GameTests: XCTestCase {
         XCTAssertEqual(game.color, .black)
         XCTAssertTrue(game.capturedPieces.contains(piece))
 
-        let move = Move(source: .capturedPiece(piece), destination: .board(.oneA))
+        let move = Move(
+            source: .capturedPiece,
+            destination: .board(.oneA),
+            piece: piece
+        )
         XCTAssertNoThrow(try game.perform(move))
 
         XCTAssertEqual(game.board[.oneA], piece)
@@ -36,10 +44,15 @@ final class GameTests: XCTestCase {
     }
 
     func testValidateWithBoardPieceDoesNotExistMoveValidationError() {
+        let piece = Piece(kind: .gold, color: .black)
         let board = Board(pieces: [:])
         let game = Game(board: board)
 
-        let move = Move(source: .board(.oneA), destination: .board(.oneB))
+        let move = Move(
+            source: .board(.oneA),
+            destination: .board(.oneB),
+            piece: piece
+        )
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .boardPieceDoesNotExist)
         }
@@ -49,68 +62,90 @@ final class GameTests: XCTestCase {
         let piece = Piece(kind: .gold, color: .black)
         let game = Game(capturedPieces: [])
 
-        let move = Move(source: .capturedPiece(piece), destination: .board(.oneA))
+        let move = Move(
+            source: .capturedPiece,
+            destination: .board(.oneA),
+            piece: piece
+        )
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .capturedPieceDoesNotExist)
         }
     }
 
     func testValidateWithInvalidPieceColorMoveValidationError() {
-        let board = Board(pieces: [
-            .oneA: Piece(kind: .gold, color: .black)
-        ])
+        let piece = Piece(kind: .gold, color: .black)
+        let board = Board(pieces: [.oneA: piece])
         let game = Game(board: board, color: .white)
 
-        let move = Move(source: .board(.oneA), destination: .board(.oneB))
+        let move = Move(
+            source: .board(.oneA),
+            destination: .board(.oneB),
+            piece: piece
+        )
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .invalidPieceColor)
         }
     }
 
     func testValidateWithFriendlyPieceAlreadyExistsMoveValidationError() {
-        let board = Board(pieces: [
-            .oneA: Piece(kind: .gold, color: .black),
-            .oneB: Piece(kind: .king, color: .black)
-        ])
+        let piece1 = Piece(kind: .gold, color: .black)
+        let piece2 = Piece(kind: .king, color: .black)
+        let board = Board(pieces: [.oneA: piece1, .oneB: piece2])
         let game = Game(board: board)
 
-        let move = Move(source: .board(.oneA), destination: .board(.oneB))
+        let move = Move(
+            source: .board(.oneA),
+            destination: .board(.oneB),
+            piece: piece1
+        )
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .friendlyPieceAlreadyExists)
         }
     }
 
     func testValidateWithPieceAlreadyPromotedMoveValidationError() {
-        let board = Board(pieces: [
-            .oneA: Piece(kind: .rook(.promoted), color: .black)
-        ])
+        let piece = Piece(kind: .rook(.promoted), color: .black)
+        let board = Board(pieces: [.oneA: piece])
         let game = Game(board: board)
 
-        let move = Move(source: .board(.oneA), destination: .board(.oneB), shouldPromote: true)
+        let move = Move(
+            source: .board(.oneA),
+            destination: .board(.oneB),
+            piece: piece,
+            shouldPromote: true
+        )
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .pieceAlreadyPromoted)
         }
     }
 
     func testValidateWithPieceCannotPromoteMoveValidationError() {
-        let board = Board(pieces: [
-            .oneA: Piece(kind: .gold, color: .black)
-        ])
+        let piece = Piece(kind: .gold, color: .black)
+        let board = Board(pieces: [.oneA: piece])
         let game = Game(board: board)
 
-        let move = Move(source: .board(.oneA), destination: .board(.oneB), shouldPromote: true)
+        let move = Move(
+            source: .board(.oneA),
+            destination: .board(.oneB),
+            piece: piece,
+            shouldPromote: true
+        )
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .pieceCannotPromote)
         }
     }
 
     func testValidateWithIllegalBoardPiecePromotionMoveValidationError() {
-        let board = Board(pieces: [
-            .oneI: Piece(kind: .rook(.normal), color: .black)
-        ])
+        let piece = Piece(kind: .rook(.normal), color: .black)
+        let board = Board(pieces: [.oneI: piece])
         let game = Game(board: board)
 
-        let move = Move(source: .board(.oneI), destination: .board(.oneH), shouldPromote: true)
+        let move = Move(
+            source: .board(.oneI),
+            destination: .board(.oneH),
+            piece: piece,
+            shouldPromote: true
+        )
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .illegalBoardPiecePromotion)
         }
@@ -120,7 +155,12 @@ final class GameTests: XCTestCase {
         let piece = Piece(kind: .rook(.normal), color: .black)
         let game = Game(capturedPieces: [piece])
 
-        let move = Move(source: .capturedPiece(piece), destination: .board(.oneA), shouldPromote: true)
+        let move = Move(
+            source: .capturedPiece,
+            destination: .board(.oneA),
+            piece: piece,
+            shouldPromote: true
+        )
         XCTAssertThrowsError(try game.validate(move)) { error in
             XCTAssertEqual(error as! Game.MoveValidationError, .illegalCapturedPiecePromotion)
         }
