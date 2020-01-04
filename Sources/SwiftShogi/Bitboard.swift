@@ -21,9 +21,9 @@ extension Bitboard {
         }
         set(hasBit) {
             if hasBit {
-                rawValue |= Self(square: square).rawValue
+                self |= Self(square: square)
             } else {
-                rawValue &= ~Self(square: square).rawValue
+                self &= ~Self(square: square)
             }
         }
     }
@@ -33,7 +33,7 @@ extension Bitboard {
     }
 
     private func intersects(_ other: Self) -> Bool {
-        rawValue & other.rawValue != 0
+        self & other != Self(rawValue: 0)
     }
 }
 
