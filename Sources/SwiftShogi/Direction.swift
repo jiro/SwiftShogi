@@ -1,4 +1,4 @@
-public enum Direction {
+public enum Direction: CaseIterable {
     case north
     case south
     case east
@@ -14,11 +14,38 @@ public enum Direction {
 }
 
 extension Direction {
+    public var flippedVertically: Self {
+        let flippedComponents: [Component] = components.map {
+            switch $0 {
+            case .north: return .south
+            case .south: return .north
+            default: return $0
+            }
+        }
+        return Self.allCases.first { $0.components == flippedComponents }!
+    }
+
     var shift: Int {
         components.map({ $0.shift }).reduce(0, +)
     }
 
-    private var components: [DirectionComponent] {
+    private enum Component {
+        case north
+        case south
+        case east
+        case west
+
+        var shift: Int {
+            switch self {
+            case .north: return -1
+            case .south: return 1
+            case .east: return -File.allCases.count
+            case .west: return File.allCases.count
+            }
+        }
+    }
+
+    private var components: [Component] {
         switch self {
         case .north: return [.north]
         case .south: return [.south]
@@ -32,22 +59,6 @@ extension Direction {
         case .northNorthWest: return [.north, .north, .west]
         case .southSouthEast: return [.south, .south, .east]
         case .southSouthWest: return [.south, .south, .west]
-        }
-    }
-}
-
-private enum DirectionComponent {
-    case north
-    case south
-    case east
-    case west
-
-    var shift: Int {
-        switch self {
-        case .north: return -1
-        case .south: return 1
-        case .east: return -File.allCases.count
-        case .west: return File.allCases.count
         }
     }
 }

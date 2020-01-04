@@ -4,11 +4,11 @@ public enum Color {
 }
 
 extension Color {
+    public var isBlack: Bool { self == .black }
+
     public mutating func toggle() {
         self = isBlack ? .white : .black
     }
-
-    private var isBlack: Bool { self == .black }
 }
 
 extension Color: CaseIterable {}

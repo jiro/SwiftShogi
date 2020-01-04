@@ -54,6 +54,66 @@ extension Piece {
     }
 }
 
+extension Piece {
+    public struct Attack: Hashable {
+        public let direction: Direction
+        public let isFarReaching: Bool
+    }
+
+    public var attacks: Set<Attack> {
+        let directions = farReachingDirections
+        let attacks = attackableDirections.map {
+            Attack(direction: $0, isFarReaching: directions.contains($0))
+        }
+        return Set(attacks)
+    }
+
+    private var attackableDirections: [Direction] {
+        let directions: [Direction] = {
+            switch kind {
+            case .pawn(.normal),
+                 .lance(.normal):
+                return [.north]
+            case .knight(.normal):
+                return [.northNorthEast, .northNorthWest]
+            case .silver(.normal):
+                return [.north, .northEast, .northWest, .southEast, .southWest]
+            case .pawn(.promoted),
+                 .lance(.promoted),
+                 .knight(.promoted),
+                 .silver(.promoted),
+                 .gold:
+                return [.north, .south, .east, .west, .northEast, .northWest]
+            case .bishop(.normal):
+                return [.northEast, .northWest, .southEast, .southWest]
+            case .rook(.normal):
+                return [.north, .south, .east, .west]
+            case .bishop(.promoted),
+                 .rook(.promoted),
+                 .king:
+                return [.north, .south, .east, .west, .northEast, .northWest, .southEast, .southWest]
+            }
+        }()
+        return color.isBlack ? directions : directions.map { $0.flippedVertically }
+    }
+
+    private var farReachingDirections: [Direction] {
+        let directions: [Direction] = {
+            switch kind {
+            case .lance(.normal):
+                return [.north]
+            case .bishop:
+                return [.northEast, .northWest, .southEast, .southWest]
+            case .rook:
+                return [.north, .south, .east, .west]
+            default:
+                return []
+            }
+        }()
+        return color.isBlack ? directions : directions.map { $0.flippedVertically }
+    }
+}
+
 extension Piece.Kind: CaseIterable {
     public static let allCases: [Self] = [
         .pawn(.normal), .pawn(.promoted),
@@ -78,9 +138,4 @@ extension Piece: CaseIterable {
 }
 
 extension Piece.Kind: Hashable {}
-extension Piece: Hashable {
-    public func hash(into hasher: inout Hasher) {
-        hasher.combine(kind)
-        hasher.combine(color)
-    }
-}
+extension Piece: Hashable {}

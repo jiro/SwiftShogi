@@ -33,6 +33,7 @@ extension DirectionTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__DirectionTests = [
+        ("testFlippedHorizontally", testFlippedHorizontally),
         ("testShift", testShift),
     ]
 }
@@ -60,6 +61,7 @@ extension PieceTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__PieceTests = [
+        ("testAttacks", testAttacks),
         ("testCanPromote", testCanPromote),
         ("testIsPromoted", testIsPromoted),
     ]
