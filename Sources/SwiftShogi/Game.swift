@@ -48,6 +48,7 @@ extension Game {
         case capturedPieceDoesNotExist
         case invalidPieceColor
         case friendlyPieceAlreadyExists
+        case illegalAttack
         case pieceAlreadyPromoted
         case pieceCannotPromote
         case illegalBoardPiecePromotion
@@ -58,6 +59,7 @@ extension Game {
     public func validate(_ move: Move) throws {
         try validateSource(move.source, piece: move.piece)
         try validateDestination(move.destination)
+        try validateAttack(source: move.source, destination: move.destination)
         if move.shouldPromote {
             try validatePromotion(
                 source: move.source,
@@ -93,6 +95,17 @@ extension Game {
             guard piece.color != color else {
                 throw MoveValidationError.friendlyPieceAlreadyExists
             }
+        }
+    }
+
+    private func validateAttack(source: Move.Source, destination: Move.Destination) throws {
+        switch (source, destination) {
+        case let (.board(sourceSquare), .board(destinationSquare)):
+            guard board.isValidAttack(from: sourceSquare, to: destinationSquare) else {
+                throw MoveValidationError.illegalAttack
+            }
+        case (.capturedPiece, _):
+            break
         }
     }
 

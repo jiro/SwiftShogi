@@ -103,6 +103,21 @@ final class GameTests: XCTestCase {
         }
     }
 
+    func testValidateWithIllegalAttackMoveValidationError() {
+        let piece = Piece(kind: .gold, color: .black)
+        let board = Board(pieces: [.oneA: piece])
+        let game = Game(board: board)
+
+        let move = Move(
+            source: .board(.oneA),
+            destination: .board(.oneI),
+            piece: piece
+        )
+        XCTAssertThrowsError(try game.validate(move)) { error in
+            XCTAssertEqual(error as! Game.MoveValidationError, .illegalAttack)
+        }
+    }
+
     func testValidateWithPieceAlreadyPromotedMoveValidationError() {
         let piece = Piece(kind: .rook(.promoted), color: .black)
         let board = Board(pieces: [.oneA: piece])

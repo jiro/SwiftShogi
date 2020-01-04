@@ -51,6 +51,7 @@ extension GameTests {
         ("testValidateWithBoardPieceDoesNotExistMoveValidationError", testValidateWithBoardPieceDoesNotExistMoveValidationError),
         ("testValidateWithCapturedPieceDoesNotExistMoveValidationError", testValidateWithCapturedPieceDoesNotExistMoveValidationError),
         ("testValidateWithFriendlyPieceAlreadyExistsMoveValidationError", testValidateWithFriendlyPieceAlreadyExistsMoveValidationError),
+        ("testValidateWithIllegalAttackMoveValidationError", testValidateWithIllegalAttackMoveValidationError),
         ("testValidateWithIllegalBoardPiecePromotionMoveValidationError", testValidateWithIllegalBoardPiecePromotionMoveValidationError),
         ("testValidateWithIllegalCapturedPiecePromotionMoveValidationError", testValidateWithIllegalCapturedPiecePromotionMoveValidationError),
         ("testValidateWithInvalidPieceColorMoveValidationError", testValidateWithInvalidPieceColorMoveValidationError),
