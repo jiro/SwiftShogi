@@ -1,4 +1,4 @@
-public enum Color {
+public enum Color: CaseIterable {
     case black
     case white
 }
@@ -11,4 +11,8 @@ extension Color {
     }
 }
 
-extension Color: CaseIterable {}
+extension Color: Comparable {
+    public static func < (lhs: Color, rhs: Color) -> Bool {
+        allCases.firstIndex(of: lhs)! < allCases.firstIndex(of: rhs)!
+    }
+}

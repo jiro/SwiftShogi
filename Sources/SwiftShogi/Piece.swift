@@ -52,6 +52,23 @@ extension Piece {
             return false
         }
     }
+
+    public mutating func unpromote() {
+        switch kind {
+        case .pawn(.promoted): kind = .pawn(.normal)
+        case .lance(.promoted): kind = .lance(.normal)
+        case .knight(.promoted): kind = .knight(.normal)
+        case .silver(.promoted): kind = .silver(.normal)
+        case .bishop(.promoted): kind = .bishop(.normal)
+        case .rook(.promoted): kind = .rook(.normal)
+        default: break
+        }
+    }
+
+    public mutating func capture(by color: Color) {
+        unpromote()
+        self.color = color
+    }
 }
 
 extension Piece {
@@ -134,6 +151,12 @@ extension Piece: CaseIterable {
         Kind.allCases.flatMap { kind in
             Color.allCases.map { color in (kind, color) }
         }
+    }
+}
+
+extension Piece.Kind: Comparable {
+    public static func < (lhs: Piece.Kind, rhs: Piece.Kind) -> Bool {
+        return allCases.firstIndex(of: lhs)! < allCases.firstIndex(of: rhs)!
     }
 }
 

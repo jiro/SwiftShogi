@@ -48,6 +48,7 @@ extension GameTests {
     static let __allTests__GameTests = [
         ("testPerformFromBoard", testPerformFromBoard),
         ("testPerformFromCapturedPiece", testPerformFromCapturedPiece),
+        ("testPerformWithCapturingPiece", testPerformWithCapturingPiece),
         ("testValidateWithBoardPieceDoesNotExistMoveValidationError", testValidateWithBoardPieceDoesNotExistMoveValidationError),
         ("testValidateWithCapturedPieceDoesNotExistMoveValidationError", testValidateWithCapturedPieceDoesNotExistMoveValidationError),
         ("testValidateWithFriendlyPieceAlreadyExistsMoveValidationError", testValidateWithFriendlyPieceAlreadyExistsMoveValidationError),
@@ -67,7 +68,9 @@ extension PieceTests {
     static let __allTests__PieceTests = [
         ("testAttacks", testAttacks),
         ("testCanPromote", testCanPromote),
+        ("testCapture", testCapture),
         ("testIsPromoted", testIsPromoted),
+        ("testUnpromote", testUnpromote),
     ]
 }
 

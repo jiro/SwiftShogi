@@ -48,6 +48,40 @@ final class PieceTests: XCTestCase {
         }
     }
 
+    func testUnpromote() {
+        let kinds: [(kind: Piece.Kind, expectedKind: Piece.Kind)] = [
+            (.pawn(.normal), .pawn(.normal)),
+            (.pawn(.promoted), .pawn(.normal)),
+            (.lance(.normal), .lance(.normal)),
+            (.lance(.promoted), .lance(.normal)),
+            (.knight(.normal), .knight(.normal)),
+            (.knight(.promoted), .knight(.normal)),
+            (.silver(.normal), .silver(.normal)),
+            (.silver(.promoted), .silver(.normal)),
+            (.gold, .gold),
+            (.bishop(.normal), .bishop(.normal)),
+            (.bishop(.promoted), .bishop(.normal)),
+            (.rook(.normal), .rook(.normal)),
+            (.rook(.promoted), .rook(.normal)),
+            (.king, .king),
+        ]
+        kinds.forEach {
+            var piece = Piece(kind: $0.kind, color: .black)
+            piece.unpromote()
+
+            let expected = Piece(kind: $0.expectedKind, color: .black)
+            XCTAssertEqual(piece, expected)
+        }
+    }
+
+    func testCapture() {
+        var piece = Piece(kind: .rook(.promoted), color: .black)
+        piece.capture(by: .white)
+
+        let expected = Piece(kind: .rook(.normal), color: .white)
+        XCTAssertEqual(piece, expected)
+    }
+
     func testAttacks() {
         let blackPieces: [(piece: Piece, expectedArray: [Piece.Attack])] = [
             (Piece(kind: .pawn(.normal), color: .black), [

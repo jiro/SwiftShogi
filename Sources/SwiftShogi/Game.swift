@@ -7,6 +7,15 @@ public struct Game {
         self.board = board
         self.color = color
         self.capturedPieces = capturedPieces
+        sortCapturedPieces()
+    }
+
+    private mutating func sortCapturedPieces() {
+        capturedPieces.sort {
+            $0.color == $1.color
+                ? $0.kind > $1.kind
+                : $0.color < $1.color
+        }
     }
 }
 
@@ -16,10 +25,20 @@ extension Game {
     public mutating func perform(_ move: Move) throws {
         try validate(move)
 
+        capturePieceIfNeeded(from: move.destination)
         remove(move.piece, from: move.source)
         insert(move.piece, to: move.destination)
 
         color.toggle()
+    }
+
+    private mutating func capturePieceIfNeeded(from destination: Move.Destination) {
+        guard case let .board(square) = destination, var piece = board[square] else { return }
+
+        board[square] = nil
+        piece.capture(by: color)
+        capturedPieces.append(piece)
+        sortCapturedPieces()
     }
 
     private mutating func remove(_ piece: Piece, from source: Move.Source) {
