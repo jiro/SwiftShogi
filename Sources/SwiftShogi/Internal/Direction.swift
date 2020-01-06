@@ -1,4 +1,4 @@
-public enum Direction: CaseIterable {
+ enum Direction: CaseIterable {
     case north
     case south
     case east
@@ -14,7 +14,7 @@ public enum Direction: CaseIterable {
 }
 
 extension Direction {
-    public var flippedVertically: Self {
+    var flippedVertically: Self {
         let flippedComponents: [Component] = components.map {
             switch $0 {
             case .north: return .south
