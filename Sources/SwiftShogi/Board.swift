@@ -10,7 +10,6 @@ public struct Board {
 }
 
 extension Board {
-    
     /// Gets and sets a piece at `square`.
     public subscript(square: Square) -> Piece? {
         get {
@@ -23,23 +22,6 @@ extension Board {
             }
         }
     }
-
-    private var allPieces: [Piece] { Array(pieceBitboards.keys) }
-
-    private func exists(_ piece: Piece, at square: Square) -> Bool {
-        return pieceBitboards[piece]![square]
-    }
-
-    private mutating func insert(_ piece: Piece, at square: Square) {
-        pieceBitboards[piece]![square] = true
-    }
-
-    private mutating func remove(_ piece: Piece, at square: Square) {
-        pieceBitboards[piece]![square] = false
-    }
-}
-
-extension Board {
 
     /// Returns `true` if a piece can attack from the source square to the destination square.
     public func isValidAttack(from sourceSquare: Square, to destinationSquare: Square) -> Bool {
@@ -60,13 +42,29 @@ extension Board {
     public var emptySquares: [Square] {
         (~occupiedBitboard()).squares
     }
+}
 
-    private func attacksBitboard(at square: Square) -> Bitboard {
+private extension Board {
+    var allPieces: [Piece] { Array(pieceBitboards.keys) }
+
+    func exists(_ piece: Piece, at square: Square) -> Bool {
+        pieceBitboards[piece]![square]
+    }
+
+    mutating func insert(_ piece: Piece, at square: Square) {
+        pieceBitboards[piece]![square] = true
+    }
+
+    mutating func remove(_ piece: Piece, at square: Square) {
+        pieceBitboards[piece]![square] = false
+    }
+
+    func attacksBitboard(at square: Square) -> Bitboard {
         guard let piece = self[square] else { return Bitboard(rawValue: 0) }
         return Bitboard.attacks(for: piece, at: square, stoppers: occupiedBitboard())
     }
 
-    private func occupiedBitboard(where predicate: ((Piece) -> Bool)? = nil) -> Bitboard {
+    func occupiedBitboard(where predicate: ((Piece) -> Bool)? = nil) -> Bitboard {
         pieceBitboards
             .filter { piece, _ in
                 guard let predicate = predicate else { return true }

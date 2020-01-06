@@ -31,8 +31,10 @@ extension Direction {
     var shift: Int {
         components.map({ $0.shift }).reduce(0, +)
     }
+ }
 
-    private enum Component {
+ private extension Direction {
+    enum Component {
         case north
         case south
         case east
@@ -48,7 +50,7 @@ extension Direction {
         }
     }
 
-    private var components: [Component] {
+    var components: [Component] {
         switch self {
         case .north: return [.north]
         case .south: return [.south]

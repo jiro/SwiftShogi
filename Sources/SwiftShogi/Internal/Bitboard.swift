@@ -13,7 +13,6 @@ struct Bitboard: RawRepresentable, Equatable {
 }
 
 extension Bitboard {
-
     /// Returns the squares where the bit is set to 1.
     var squares: [Square] { Square.allCases.filter { self[$0] } }
 
@@ -31,17 +30,6 @@ extension Bitboard {
         }
     }
 
-    private init(square: Square) {
-        self.init(rawValue: 1 << square.rawValue)
-    }
-
-    private func intersects(_ other: Self) -> Bool {
-        self & other != Self(rawValue: 0)
-    }
-}
-
-extension Bitboard {
-
     /// An attacks bitboard for a piece.
     static func attacks(for piece: Piece, at square: Square, stoppers: Bitboard) -> Self {
         piece.attacks.map { attack in
@@ -50,8 +38,18 @@ extension Bitboard {
                 : Self(square: square).shifted(toward: attack.direction)
         }.reduce(Self(rawValue: 0), |)
     }
+}
 
-    private func filled(toward direction: Direction, stoppers: Bitboard) -> Self {
+private extension Bitboard {
+    init(square: Square) {
+        self.init(rawValue: 1 << square.rawValue)
+    }
+
+    func intersects(_ other: Self) -> Bool {
+        self & other != Self(rawValue: 0)
+    }
+
+    func filled(toward direction: Direction, stoppers: Bitboard) -> Self {
         var bitboard = self
         var previous: Bitboard
         repeat {
@@ -62,7 +60,7 @@ extension Bitboard {
         return bitboard
     }
 
-    private func shifted(toward direction: Direction) -> Self {
+    func shifted(toward direction: Direction) -> Self {
         var bitboard = self << direction.shift
         // Prevents rank changes by shifting
         if direction.containsNorth && intersects(Self.rankA) { bitboard &= ~Self.rankI }
@@ -70,10 +68,10 @@ extension Bitboard {
         return bitboard
     }
 
-    private static let rankA: Bitboard
+    static let rankA: Bitboard
         = Square.cases(at: .a).map(Self.init).reduce(Bitboard(rawValue: 0), |)
 
-    private static let rankI: Bitboard
+    static let rankI: Bitboard
         = Square.cases(at: .i).map(Self.init).reduce(Bitboard(rawValue: 0), |)
 }
 

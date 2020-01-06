@@ -84,8 +84,10 @@ extension Piece {
         }
         return Set(attacks)
     }
+}
 
-    private var attackableDirections: [Direction] {
+private extension Piece {
+    var attackableDirections: [Direction] {
         let directions: [Direction] = {
             switch kind {
             case .pawn(.normal),
@@ -114,7 +116,7 @@ extension Piece {
         return color.isBlack ? directions : directions.map { $0.flippedVertically }
     }
 
-    private var farReachingDirections: [Direction] {
+    var farReachingDirections: [Direction] {
         let directions: [Direction] = {
             switch kind {
             case .lance(.normal):
