@@ -72,12 +72,12 @@ extension Piece {
 }
 
 extension Piece {
-    public struct Attack: Hashable {
-        public let direction: Direction
-        public let isFarReaching: Bool
+    struct Attack: Hashable {
+        let direction: Direction
+        let isFarReaching: Bool
     }
 
-    public var attacks: Set<Attack> {
+    var attacks: Set<Attack> {
         let directions = farReachingDirections
         let attacks = attackableDirections.map {
             Attack(direction: $0, isFarReaching: directions.contains($0))
