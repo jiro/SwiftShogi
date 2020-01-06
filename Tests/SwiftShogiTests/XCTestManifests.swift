@@ -53,6 +53,7 @@ extension GameTests {
         ("testPerformFromBoard", testPerformFromBoard),
         ("testPerformFromCapturedPiece", testPerformFromCapturedPiece),
         ("testPerformWithCapturingPiece", testPerformWithCapturingPiece),
+        ("testPerformWithPromotingPiece", testPerformWithPromotingPiece),
         ("testValidateWithBoardPieceDoesNotExistMoveValidationError", testValidateWithBoardPieceDoesNotExistMoveValidationError),
         ("testValidateWithCapturedPieceDoesNotExistMoveValidationError", testValidateWithCapturedPieceDoesNotExistMoveValidationError),
         ("testValidateWithFriendlyPieceAlreadyExistsMoveValidationError", testValidateWithFriendlyPieceAlreadyExistsMoveValidationError),
@@ -76,6 +77,7 @@ extension PieceTests {
         ("testCanPromote", testCanPromote),
         ("testCapture", testCapture),
         ("testIsPromoted", testIsPromoted),
+        ("testPromote", testPromote),
         ("testUnpromote", testUnpromote),
     ]
 }

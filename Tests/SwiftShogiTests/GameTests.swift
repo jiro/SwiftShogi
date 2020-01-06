@@ -69,6 +69,29 @@ final class GameTests: XCTestCase {
         XCTAssertEqual(game.capturedPieces, [expected, piece3, piece4])
     }
 
+    func testPerformWithPromotingPiece() {
+        let piece = Piece(kind: .rook(.normal), color: .black)
+        let board = Board(pieces: [.oneA: piece])
+        var game = Game(board: board)
+        XCTAssertEqual(game.board[.oneA], piece)
+        XCTAssertNil(game.board[.oneB])
+        XCTAssertEqual(game.color, .black)
+        XCTAssertTrue(game.capturedPieces.isEmpty)
+
+        let move = Move(
+            source: .board(.oneA),
+            destination: .board(.oneB),
+            piece: piece,
+            shouldPromote: true
+        )
+        XCTAssertNoThrow(try game.perform(move))
+
+        let expectedPiece = Piece(kind: .rook(.promoted), color: .black)
+        XCTAssertNil(game.board[.oneA])
+        XCTAssertEqual(game.board[.oneB], expectedPiece)
+        XCTAssertEqual(game.color, .white)
+        XCTAssertTrue(game.capturedPieces.isEmpty)
+    }
 
     func testValidateWithBoardPieceDoesNotExistMoveValidationError() {
         let piece = Piece(kind: .gold, color: .black)

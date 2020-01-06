@@ -48,6 +48,32 @@ final class PieceTests: XCTestCase {
         }
     }
 
+    func testPromote() {
+        let kinds: [(kind: Piece.Kind, expectedKind: Piece.Kind)] = [
+            (.pawn(.normal), .pawn(.promoted)),
+            (.pawn(.promoted), .pawn(.promoted)),
+            (.lance(.normal), .lance(.promoted)),
+            (.lance(.promoted), .lance(.promoted)),
+            (.knight(.normal), .knight(.promoted)),
+            (.knight(.promoted), .knight(.promoted)),
+            (.silver(.normal), .silver(.promoted)),
+            (.silver(.promoted), .silver(.promoted)),
+            (.gold, .gold),
+            (.bishop(.normal), .bishop(.promoted)),
+            (.bishop(.promoted), .bishop(.promoted)),
+            (.rook(.normal), .rook(.promoted)),
+            (.rook(.promoted), .rook(.promoted)),
+            (.king, .king),
+        ]
+        kinds.forEach {
+            var piece = Piece(kind: $0.kind, color: .black)
+            piece.promote()
+
+            let expected = Piece(kind: $0.expectedKind, color: .black)
+            XCTAssertEqual(piece, expected)
+        }
+    }
+
     func testUnpromote() {
         let kinds: [(kind: Piece.Kind, expectedKind: Piece.Kind)] = [
             (.pawn(.normal), .pawn(.normal)),

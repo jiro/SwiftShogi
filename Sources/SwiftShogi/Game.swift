@@ -18,7 +18,7 @@ extension Game {
 
         capturePieceIfNeeded(from: move.destination)
         remove(move.piece, from: move.source)
-        insert(move.piece, to: move.destination)
+        insert(move.piece, to: move.destination, shouldPromote: move.shouldPromote)
 
         color.toggle()
     }
@@ -97,9 +97,13 @@ private extension Game {
         }
     }
 
-    mutating func insert(_ piece: Piece, to destination: Move.Destination) {
+    mutating func insert(_ piece: Piece, to destination: Move.Destination, shouldPromote: Bool) {
         switch destination {
         case let .board(square):
+            var piece = piece
+            if shouldPromote {
+                piece.promote()
+            }
             board[square] = piece
         }
     }

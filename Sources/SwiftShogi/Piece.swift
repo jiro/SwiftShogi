@@ -53,6 +53,18 @@ extension Piece {
         }
     }
 
+    public mutating func promote() {
+        switch kind {
+        case .pawn(.normal): kind = .pawn(.promoted)
+        case .lance(.normal): kind = .lance(.promoted)
+        case .knight(.normal): kind = .knight(.promoted)
+        case .silver(.normal): kind = .silver(.promoted)
+        case .bishop(.normal): kind = .bishop(.promoted)
+        case .rook(.normal): kind = .rook(.promoted)
+        default: break
+        }
+    }
+
     public mutating func unpromote() {
         switch kind {
         case .pawn(.promoted): kind = .pawn(.normal)
