@@ -43,17 +43,35 @@ extension Board {
 
     /// Returns `true` if a piece can attack from the source square to the destination square.
     public func isValidAttack(from sourceSquare: Square, to destinationSquare: Square) -> Bool {
-        let bitboard = attacksBitboard(at: sourceSquare)
-        return bitboard[destinationSquare]
+        attacksBitboard(at: sourceSquare)[destinationSquare]
+    }
+
+    /// Returns the attackable squares from `square`.
+    public func attackableSuqares(from square: Square) -> [Square] {
+        attacksBitboard(at: square).squares
+    }
+
+    /// Returns the occupied squares for `color`.
+    public func occupiedSquares(for color: Color) -> [Square] {
+        occupiedBitboard(where: { piece in piece.color == color }).squares
+    }
+
+    /// Returns the empty squares.
+    public var emptySquares: [Square] {
+        (~occupiedBitboard()).squares
     }
 
     private func attacksBitboard(at square: Square) -> Bitboard {
         guard let piece = self[square] else { return Bitboard(rawValue: 0) }
-        return Bitboard.attacks(for: piece, at: square, stoppers: occupiedBitboard)
+        return Bitboard.attacks(for: piece, at: square, stoppers: occupiedBitboard())
     }
 
-    private var occupiedBitboard: Bitboard {
+    private func occupiedBitboard(where predicate: ((Piece) -> Bool)? = nil) -> Bitboard {
         pieceBitboards
+            .filter { piece, _ in
+                guard let predicate = predicate else { return true }
+                return predicate(piece)
+            }
             .values
             .reduce(Bitboard(rawValue: 0), |)
     }

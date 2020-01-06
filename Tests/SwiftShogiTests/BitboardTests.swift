@@ -2,6 +2,21 @@ import XCTest
 @testable import SwiftShogi
 
 final class BitboardTests: XCTestCase {
+    func testSquares() {
+        let bitboard = Bitboard(bits: [
+            1, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 0,
+            0, 0, 0, 0, 0, 0, 0, 0, 1,
+        ])
+        XCTAssertEqual(bitboard.squares, [.oneA, .nineI])
+    }
+
     func testSubscript() {
         var bitboard = Bitboard(rawValue: 0)
         XCTAssertFalse(bitboard[.oneA])

@@ -147,3 +147,51 @@ extension Game {
         }
     }
 }
+
+extension Game {
+
+    /// Returns the valid moves for the current color.
+    public func validMoves() -> [Move] {
+        let moves = movesFromBoard + movesFromCapturedPieces
+        return moves.filter {
+            do {
+                try self.validate($0)
+                return true
+            } catch {
+                return false
+            }
+        }
+    }
+
+    /// Returns the valid moves from `square`.
+    public func validMoves(from source: Move.Source) -> [Move] {
+        validMoves().filter { $0.source == source }
+    }
+
+    private var movesFromBoard: [Move] {
+        board.occupiedSquares(for: color).flatMap { boardPieceMoves(for: board[$0]!, from: $0) }
+    }
+
+    private func boardPieceMoves(for piece: Piece, from square: Square) -> [Move] {
+        board.attackableSuqares(from: square).flatMap { attackableSuqare in
+            [true, false].map { shouldPromote in
+                Move(
+                    source: .board(square),
+                    destination: .board(attackableSuqare),
+                    piece: piece,
+                    shouldPromote: shouldPromote
+                )
+            }
+        }
+    }
+
+    private var movesFromCapturedPieces: [Move] {
+        capturedPieces.filter({ $0.color == color }).flatMap { capturedPieceMoves(for: $0) }
+    }
+
+    private func capturedPieceMoves(for piece: Piece) -> [Move] {
+        board.emptySquares.map {
+            Move(source: .capturedPiece, destination: .board($0), piece: piece)
+        }
+    }
+}

@@ -207,6 +207,66 @@ final class GameTests: XCTestCase {
             XCTAssertEqual(error as! Game.MoveValidationError, .illegalCapturedPiecePromotion)
         }
     }
+
+    func testValidMoves() {
+        let piece1 = Piece(kind: .silver(.normal), color: .black)
+        let piece2 = Piece(kind: .silver(.normal), color: .white)
+        let piece3 = Piece(kind: .gold, color: .black)
+        let piece4 = Piece(kind: .gold, color: .white)
+        let board = Board(pieces: [.fiveI: piece1, .fiveA: piece2])
+        let game = Game(board: board, capturedPieces: [piece3, piece4])
+
+        let expectedFromBoard: [Move] = [
+            .fourH, .fiveH, .sixH
+        ].map {
+            Move(
+                source: .board(.fiveI),
+                destination: .board($0),
+                piece: piece1,
+                shouldPromote: false
+            )
+        }
+        let expectedFromCapturedPiece: [Move] = [
+            .oneA,   .oneB,   .oneC,   .oneD,   .oneE,   .oneF,   .oneG,   .oneH,   .oneI,
+            .twoA,   .twoB,   .twoC,   .twoD,   .twoE,   .twoF,   .twoG,   .twoH,   .twoI,
+            .threeA, .threeB, .threeC, .threeD, .threeE, .threeF, .threeG, .threeH, .threeI,
+            .fourA,  .fourB,  .fourC,  .fourD,  .fourE,  .fourF,  .fourG,  .fourH,  .fourI,
+            .fiveB,  .fiveC,  .fiveD,  .fiveE,  .fiveF,  .fiveG,  .fiveH,
+            .sixA,   .sixB,   .sixC,   .sixD,   .sixE,   .sixF,   .sixG,   .sixH,   .sixI,
+            .sevenA, .sevenB, .sevenC, .sevenD, .sevenE, .sevenF, .sevenG, .sevenH, .sevenI,
+            .eightA, .eightB, .eightC, .eightD, .eightE, .eightF, .eightG, .eightH, .eightI,
+            .nineA,  .nineB,  .nineC,  .nineD,  .nineE,  .nineF,  .nineG,  .nineH,  .nineI,
+        ].map {
+            Move(
+                source: .capturedPiece,
+                destination: .board($0),
+                piece: piece3,
+                shouldPromote: false
+            )
+        }
+        XCTAssertEqual(game.validMoves(), expectedFromBoard + expectedFromCapturedPiece)
+    }
+
+    func testValidMovesWithMoveSource() {
+        let piece1 = Piece(kind: .silver(.normal), color: .black)
+        let piece2 = Piece(kind: .silver(.normal), color: .white)
+        let piece3 = Piece(kind: .gold, color: .black)
+        let piece4 = Piece(kind: .gold, color: .white)
+        let board = Board(pieces: [.fiveI: piece1, .fiveA: piece2])
+        let game = Game(board: board, capturedPieces: [piece3, piece4])
+
+        let expected: [Move] = [
+            .fourH, .fiveH, .sixH
+        ].map {
+            Move(
+                source: .board(.fiveI),
+                destination: .board($0),
+                piece: piece1,
+                shouldPromote: false
+            )
+        }
+        XCTAssertEqual(game.validMoves(from: .board(.fiveI)), expected)
+    }
 }
 
 private extension Board {

@@ -8,6 +8,7 @@ extension BitboardTests {
     static let __allTests__BitboardTests = [
         ("testAttacks", testAttacks),
         ("testAttacksWithStoppers", testAttacksWithStoppers),
+        ("testSquares", testSquares),
         ("testSubscript", testSubscript),
     ]
 }
@@ -17,7 +18,10 @@ extension BoardTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__BoardTests = [
+        ("testAttackableSquares", testAttackableSquares),
+        ("testEmptySquares", testEmptySquares),
         ("testIsValidAttack", testIsValidAttack),
+        ("testOccupiedSquares", testOccupiedSquares),
         ("testSubscript", testSubscript),
     ]
 }
@@ -58,6 +62,8 @@ extension GameTests {
         ("testValidateWithInvalidPieceColorMoveValidationError", testValidateWithInvalidPieceColorMoveValidationError),
         ("testValidateWithPieceAlreadyPromotedMoveValidationError", testValidateWithPieceAlreadyPromotedMoveValidationError),
         ("testValidateWithPieceCannotPromoteMoveValidationError", testValidateWithPieceCannotPromoteMoveValidationError),
+        ("testValidMoves", testValidMoves),
+        ("testValidMovesWithMoveSource", testValidMovesWithMoveSource),
     ]
 }
 
