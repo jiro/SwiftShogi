@@ -16,19 +16,11 @@ struct UInt128 {
         )
     }
 
-    static func &= (lhs: inout Self, rhs: Self) {
-        lhs = lhs & rhs
-    }
-
     static func | (lhs: Self, rhs: Self) -> Self {
         Self(
             upperBits: lhs.upperBits | rhs.upperBits,
             lowerBits: lhs.lowerBits | rhs.lowerBits
         )
-    }
-
-    static func |= (lhs: inout Self, rhs: Self) {
-        lhs = lhs | rhs
     }
 
     static func << (lhs: Self, rhs: Int) -> Self {
