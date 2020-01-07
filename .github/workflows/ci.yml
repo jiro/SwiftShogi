@@ -1,4 +1,4 @@
-name: Swift
+name: Swift CI
 on: [push]
 jobs:
   test-mac:
