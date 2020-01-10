@@ -16,21 +16,21 @@ extension Board {
             allPieces.first { exists($0, at: square) }
         }
         set(piece) {
-            allPieces.forEach { remove($0, at: square) }
+            allPieces.forEach { remove($0, from: square) }
             if let piece = piece {
-                insert(piece, at: square)
+                insert(piece, to: square)
             }
         }
     }
 
     /// Returns `true` if a piece can attack from the source square to the destination square.
     public func isValidAttack(from sourceSquare: Square, to destinationSquare: Square) -> Bool {
-        attacksBitboard(at: sourceSquare)[destinationSquare]
+        attacksBitboard(from: sourceSquare)[destinationSquare]
     }
 
     /// Returns the attackable squares from `square`.
     public func attackableSuqares(from square: Square) -> [Square] {
-        attacksBitboard(at: square).squares
+        attacksBitboard(from: square).squares
     }
 
     /// Returns the occupied squares for `color`.
@@ -51,17 +51,17 @@ private extension Board {
         pieceBitboards[piece]![square]
     }
 
-    mutating func insert(_ piece: Piece, at square: Square) {
+    mutating func insert(_ piece: Piece, to square: Square) {
         pieceBitboards[piece]![square] = true
     }
 
-    mutating func remove(_ piece: Piece, at square: Square) {
+    mutating func remove(_ piece: Piece, from square: Square) {
         pieceBitboards[piece]![square] = false
     }
 
-    func attacksBitboard(at square: Square) -> Bitboard {
+    func attacksBitboard(from square: Square) -> Bitboard {
         guard let piece = self[square] else { return Bitboard(rawValue: 0) }
-        return Bitboard.attacks(for: piece, at: square, stoppers: occupiedBitboard())
+        return Bitboard.attacks(from: square, piece: piece, stoppers: occupiedBitboard())
     }
 
     func occupiedBitboard(where predicate: ((Piece) -> Bool)? = nil) -> Bitboard {

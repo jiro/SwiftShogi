@@ -32,7 +32,7 @@ final class BitboardTests: XCTestCase {
         let piece = Piece(kind: .rook(.promoted), color: .black)
         let square = Square.fiveE
         let stoppers = Bitboard(rawValue: 0)
-        let attacks = Bitboard.attacks(for: piece, at: square, stoppers: stoppers)
+        let attacks = Bitboard.attacks(from: square, piece: piece, stoppers: stoppers)
 
         let expected = Bitboard(bits: [
             0, 0, 0, 0, 1, 0, 0, 0, 0,
@@ -62,7 +62,7 @@ final class BitboardTests: XCTestCase {
             0, 0, 0, 0, 0, 0, 0, 0, 0,
             0, 0, 0, 0, 0, 0, 0, 0, 0,
         ])
-        let attacks = Bitboard.attacks(for: piece, at: square, stoppers: stoppers)
+        let attacks = Bitboard.attacks(from: square, piece: piece, stoppers: stoppers)
 
         let expected = Bitboard(bits: [
             0, 0, 0, 0, 1, 0, 0, 0, 0,

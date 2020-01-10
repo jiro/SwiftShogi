@@ -31,7 +31,7 @@ extension Bitboard {
     }
 
     /// An attacks bitboard for a piece.
-    static func attacks(for piece: Piece, at square: Square, stoppers: Bitboard) -> Self {
+    static func attacks(from square: Square, piece: Piece, stoppers: Bitboard) -> Self {
         piece.attacks.map { attack in
             attack.isFarReaching
                 ? Self(square: square).filled(toward: attack.direction, stoppers: stoppers)
