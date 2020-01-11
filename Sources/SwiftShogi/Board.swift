@@ -33,14 +33,32 @@ extension Board {
         attacksBitboard(from: square).squares
     }
 
-    /// Returns the occupied squares for `color`.
-    public func occupiedSquares(for color: Color) -> [Square] {
-        occupiedBitboard(where: { piece in piece.color == color }).squares
+    /// Returns the attackable squares to `square` corresponding to `color`.
+    public func attackableSquares(to square: Square, for color: Color? = nil) -> [Square] {
+        occupiedSquares(for: color).filter { occupiedSquare in
+            attacksBitboard(from: occupiedSquare).squares.contains(square)
+        }
+    }
+
+    /// Returns the occupied squares corresponding to `color`.
+    public func occupiedSquares(for color: Color? = nil) -> [Square] {
+        let bitboard = occupiedBitboard { piece in
+            guard let color = color else { return true }
+            return piece.color == color
+        }
+        return bitboard.squares
     }
 
     /// Returns the empty squares.
     public var emptySquares: [Square] {
-        (~occupiedBitboard()).squares
+        let bitboard = ~occupiedBitboard()
+        return bitboard.squares
+    }
+
+    /// Returns `true` if the king for `color` is in check.
+    public func isKingChecked(for color: Color) -> Bool {
+        let square = pieceBitboards[Piece(kind: .king, color: color)]!.squares.first!
+        return !attackableSquares(to: square, for: color.toggled()).isEmpty
     }
 }
 

@@ -9,6 +9,12 @@ extension Color {
     public mutating func toggle() {
         self = isBlack ? .white : .black
     }
+
+    public func toggled() -> Self {
+        var color = self
+        color.toggle()
+        return color
+    }
 }
 
 extension Color: Comparable {

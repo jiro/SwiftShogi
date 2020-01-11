@@ -18,8 +18,10 @@ extension BoardTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__BoardTests = [
-        ("testAttackableSquares", testAttackableSquares),
+        ("testAttackableSquaresFromSquare", testAttackableSquaresFromSquare),
+        ("testAttackableSquaresToSquare", testAttackableSquaresToSquare),
         ("testEmptySquares", testEmptySquares),
+        ("testIsKingChecked", testIsKingChecked),
         ("testIsValidAttack", testIsValidAttack),
         ("testOccupiedSquares", testOccupiedSquares),
         ("testSubscript", testSubscript),
