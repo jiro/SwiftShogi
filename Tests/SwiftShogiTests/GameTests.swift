@@ -168,6 +168,33 @@ final class GameTests: XCTestCase {
         }
     }
 
+    func testValidateWithKingPieceIsCheckedMoveValidationError() {
+        let piece1 = Piece(kind: .king, color: .black)
+        let piece2 = Piece(kind: .lance(.normal), color: .white)
+        let piece3 = Piece(kind: .gold, color: .black)
+        let board = Board(pieces: [.fiveI: piece1, .fiveA: piece2])
+
+        let moves: [Move] = [
+            Move(
+                source: .board(.fiveI),
+                destination: .board(.fiveH),
+                piece: piece1
+            ),
+            Move(
+                source: .capturedPiece,
+                destination: .board(.oneA),
+                piece: piece3
+            )
+        ]
+        try! moves.forEach { move in
+            let game = Game(board: board, capturedPieces: [piece3])
+
+            XCTAssertThrowsError(try game.validate(move)) { error in
+                XCTAssertEqual(error as! Game.MoveValidationError, .kingPieceIsChecked)
+            }
+        }
+    }
+
     func testValidateWithPieceAlreadyPromotedMoveValidationError() {
         let piece = Piece(kind: .rook(.promoted), color: .black)
         let board = Board(pieces: [.oneA: piece])

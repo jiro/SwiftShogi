@@ -30,6 +30,7 @@ extension Game {
         case invalidPieceColor
         case friendlyPieceAlreadyExists
         case illegalAttack
+        case kingPieceIsChecked
         case pieceAlreadyPromoted
         case pieceCannotPromote
         case illegalBoardPiecePromotion
@@ -40,7 +41,12 @@ extension Game {
     public func validate(_ move: Move) throws {
         try validateSource(move.source, piece: move.piece)
         try validateDestination(move.destination)
-        try validateAttack(source: move.source, destination: move.destination)
+        try validateAttack(
+            source: move.source,
+            destination: move.destination,
+            piece: move.piece
+        )
+
         if move.shouldPromote {
             try validatePromotion(
                 source: move.source,
@@ -137,14 +143,19 @@ private extension Game {
         }
     }
 
-    func validateAttack(source: Move.Source, destination: Move.Destination) throws {
-        switch (source, destination) {
-        case let (.board(sourceSquare), .board(destinationSquare)):
-            guard board.isValidAttack(from: sourceSquare, to: destinationSquare) else {
+    func validateAttack(source: Move.Source, destination: Move.Destination, piece: Piece) throws {
+        switch (source, destination, piece) {
+        case let (.board(sourceSquare), .board(destinationSquare), _):
+            guard board.isAttackable(from: sourceSquare, to: destinationSquare) else {
                 throw MoveValidationError.illegalAttack
             }
-        case (.capturedPiece, _):
-            break
+            guard !board.isKingCheckedByMovingPiece(from: sourceSquare, to: destinationSquare, for: color) else {
+                throw MoveValidationError.kingPieceIsChecked
+            }
+        case let (.capturedPiece, .board(destinationSquare), piece):
+            guard !board.isKingCheckedByMovingPiece(piece, to: destinationSquare, for: color) else {
+                throw MoveValidationError.kingPieceIsChecked
+            }
         }
     }
 

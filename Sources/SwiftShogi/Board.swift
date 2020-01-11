@@ -24,7 +24,7 @@ extension Board {
     }
 
     /// Returns `true` if a piece can attack from the source square to the destination square.
-    public func isValidAttack(from sourceSquare: Square, to destinationSquare: Square) -> Bool {
+    public func isAttackable(from sourceSquare: Square, to destinationSquare: Square) -> Bool {
         attacksBitboard(from: sourceSquare)[destinationSquare]
     }
 
@@ -57,8 +57,23 @@ extension Board {
 
     /// Returns `true` if the king for `color` is in check.
     public func isKingChecked(for color: Color) -> Bool {
-        let square = pieceBitboards[Piece(kind: .king, color: color)]!.squares.first!
+        let piece = Piece(kind: .king, color: color)
+        guard let square = pieceBitboards[piece]!.squares.first else { return false }
         return !attackableSquares(to: square, for: color.toggled()).isEmpty
+    }
+
+    /// Returns `true` if the king for `color` is in check by moving a piece.
+    public func isKingCheckedByMovingPiece(from sourceSquare: Square, to destinationSquare: Square, for color: Color) -> Bool {
+        var board = self
+        board.movePiece(from: sourceSquare, to: destinationSquare)
+        return board.isKingChecked(for: color)
+    }
+
+    /// Returns `true` if the king for `color` is in check by moving `piece`.
+    public func isKingCheckedByMovingPiece(_ piece: Piece, to destinationSquare: Square, for color: Color) -> Bool {
+        var board = self
+        board.movePiece(piece, to: destinationSquare)
+        return board.isKingChecked(for: color)
     }
 }
 
@@ -75,6 +90,15 @@ private extension Board {
 
     mutating func remove(_ piece: Piece, from square: Square) {
         pieceBitboards[piece]![square] = false
+    }
+
+    mutating func movePiece(from sourceSquare: Square, to destinationSquare: Square) {
+        movePiece(self[sourceSquare], to: destinationSquare)
+        self[sourceSquare] = nil
+    }
+
+    mutating func movePiece(_ piece: Piece?, to destinationSquare: Square) {
+        self[destinationSquare] = piece
     }
 
     func attacksBitboard(from square: Square) -> Bitboard {

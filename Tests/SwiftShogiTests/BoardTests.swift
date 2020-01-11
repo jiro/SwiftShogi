@@ -14,14 +14,14 @@ final class BoardTests: XCTestCase {
         XCTAssertNil(board[.oneA])
     }
 
-    func testIsValidAttack() {
+    func testIsAttackable() {
         let piece = Piece(kind: .gold, color: .black)
         var board = Board()
         board[.oneA] = piece
 
-        XCTAssertTrue(board.isValidAttack(from: .oneA, to: .oneB))
-        XCTAssertFalse(board.isValidAttack(from: .oneA, to: .oneC))
-        XCTAssertFalse(board.isValidAttack(from: .oneB, to: .oneC))
+        XCTAssertTrue(board.isAttackable(from: .oneA, to: .oneB))
+        XCTAssertFalse(board.isAttackable(from: .oneA, to: .oneC))
+        XCTAssertFalse(board.isAttackable(from: .oneB, to: .oneC))
     }
 
     func testAttackableSquaresFromSquare() {
@@ -76,11 +76,36 @@ final class BoardTests: XCTestCase {
         let piece2 = Piece(kind: .king, color: .white)
         let piece3 = Piece(kind: .gold, color: .black)
         var board = Board()
-        board[.fiveA] = piece1
-        board[.fiveI] = piece2
-        board[.fiveH] = piece3
+        board[.fiveI] = piece1
+        board[.fiveA] = piece2
+        board[.fiveB] = piece3
 
         XCTAssertFalse(board.isKingChecked(for: .black))
         XCTAssertTrue(board.isKingChecked(for: .white))
+    }
+
+    func testIsKingCheckedByMovingPieceFromSquare() {
+        let piece1 = Piece(kind: .king, color: .black)
+        let piece2 = Piece(kind: .lance(.normal), color: .white)
+        let piece3 = Piece(kind: .gold, color: .black)
+        var board = Board()
+        board[.fiveI] = piece1
+        board[.fiveA] = piece2
+        board[.fiveH] = piece3
+
+        XCTAssertFalse(board.isKingCheckedByMovingPiece(from: .fiveH, to: .fiveG, for: .black))
+        XCTAssertTrue(board.isKingCheckedByMovingPiece(from: .fiveH, to: .fourH, for: .black))
+    }
+
+    func testIsKingCheckedByMovingPiece() {
+        let piece1 = Piece(kind: .king, color: .black)
+        let piece2 = Piece(kind: .lance(.normal), color: .white)
+        let piece3 = Piece(kind: .gold, color: .black)
+        var board = Board()
+        board[.fiveI] = piece1
+        board[.fiveA] = piece2
+
+        XCTAssertFalse(board.isKingCheckedByMovingPiece(piece3, to: .fiveG, for: .black))
+        XCTAssertTrue(board.isKingCheckedByMovingPiece(piece3, to: .fourH, for: .black))
     }
 }
