@@ -63,13 +63,8 @@ final class SFENComponentsTests: XCTestCase {
                 Piece(kind: .pawn(.normal), color: .white),
                 Piece(kind: .pawn(.normal), color: .white)
             ]),
-            ("+P+p", [
-                Piece(kind: .pawn(.promoted), color: .black),
-                Piece(kind: .pawn(.promoted), color: .white)
-            ]),
-            ("+P++p", nil),
-            ("+P22p", nil),
-            ("Pp+", nil),
+            ("-Pp", nil),
+            ("P22p", nil),
             ("Pp2", nil),
             ("z", nil),
         ]
