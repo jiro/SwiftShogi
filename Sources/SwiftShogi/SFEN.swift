@@ -47,8 +47,6 @@ extension SFEN.Fields {
             var hasPrefix = false
             for character in Array(string) {
                 switch character {
-                case SFEN.promotionPrefix:
-                    hasPrefix = true
                 case _ where SFEN.pieceCharacters.contains(character) || hasPrefix:
                     guard
                         let square = squares.next(),
@@ -56,6 +54,8 @@ extension SFEN.Fields {
                         else { return nil }
                     board[square] = piece
                     hasPrefix = false
+                case SFEN.promotionPrefix:
+                    hasPrefix = true
                 case _ where SFEN.digitCharacters.contains(character):
                     let skipCount = Int(String(character))!
                     for _ in (0 ..< skipCount) {
