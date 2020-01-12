@@ -314,7 +314,7 @@ final class GameTests: XCTestCase {
         let board = Board(pieces: [.fiveI: piece1, .fiveA: piece2])
         let game = Game(board: board, capturedPieces: [piece3, piece4])
 
-        let expected: [Move] = [
+        let expectedFromBoard: [Move] = [
             .fourH, .fiveH, .sixH
         ].map {
             Move(
@@ -324,7 +324,27 @@ final class GameTests: XCTestCase {
                 shouldPromote: false
             )
         }
-        XCTAssertEqual(game.validMoves(from: .board(.fiveI)), expected)
+        XCTAssertEqual(game.validMoves(from: .board(.fiveI), piece: piece1), expectedFromBoard)
+
+        let expectedFromCapturedPiece: [Move] = [
+            .oneA,   .oneB,   .oneC,   .oneD,   .oneE,   .oneF,   .oneG,   .oneH,   .oneI,
+            .twoA,   .twoB,   .twoC,   .twoD,   .twoE,   .twoF,   .twoG,   .twoH,   .twoI,
+            .threeA, .threeB, .threeC, .threeD, .threeE, .threeF, .threeG, .threeH, .threeI,
+            .fourA,  .fourB,  .fourC,  .fourD,  .fourE,  .fourF,  .fourG,  .fourH,  .fourI,
+            .fiveB,  .fiveC,  .fiveD,  .fiveE,  .fiveF,  .fiveG,  .fiveH,
+            .sixA,   .sixB,   .sixC,   .sixD,   .sixE,   .sixF,   .sixG,   .sixH,   .sixI,
+            .sevenA, .sevenB, .sevenC, .sevenD, .sevenE, .sevenF, .sevenG, .sevenH, .sevenI,
+            .eightA, .eightB, .eightC, .eightD, .eightE, .eightF, .eightG, .eightH, .eightI,
+            .nineA,  .nineB,  .nineC,  .nineD,  .nineE,  .nineF,  .nineG,  .nineH,  .nineI,
+        ].map {
+            Move(
+                source: .capturedPiece,
+                destination: .board($0),
+                piece: piece3,
+                shouldPromote: false
+            )
+        }
+        XCTAssertEqual(game.validMoves(from: .capturedPiece, piece: piece3), expectedFromCapturedPiece)
     }
 }
 

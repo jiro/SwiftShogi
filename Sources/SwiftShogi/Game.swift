@@ -77,9 +77,9 @@ extension Game {
         }
     }
 
-    /// Returns the valid moves from `square`.
-    public func validMoves(from source: Move.Source) -> [Move] {
-        validMoves().filter { $0.source == source }
+    /// Returns the valid moves of `piece` from `source`.
+    public func validMoves(from source: Move.Source, piece: Piece) -> [Move] {
+        validMoves().filter { $0.source == source && $0.piece == piece }
     }
 }
 
