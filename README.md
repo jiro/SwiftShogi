@@ -4,7 +4,7 @@
 
 <p align="center">
     <a href="https://github.com/hedjirog/SwiftShogi/actions">
-        <img src="https://github.com/hedjirog/SwiftShogi/workflows/Swift%20CI/badge.svg" alt="Workflow Status" />
+        <img src="https://github.com/hedjirog/SwiftShogi/workflows/CI/badge.svg" alt="Workflow Status" />
     </a>
     <a href="https://swift.org/download/">
         <img src="https://img.shields.io/badge/swift-5.1-orange.svg" alt="Swift Version" />
