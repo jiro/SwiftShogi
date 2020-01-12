@@ -55,6 +55,7 @@ extension GameTests {
     //   `swift test --generate-linuxmain`
     // to regenerate.
     static let __allTests__GameTests = [
+        ("testInitializerWithSFEN", testInitializerWithSFEN),
         ("testPerformFromBoard", testPerformFromBoard),
         ("testPerformFromCapturedPiece", testPerformFromCapturedPiece),
         ("testPerformWithCapturingPiece", testPerformWithCapturingPiece),

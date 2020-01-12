@@ -9,6 +9,14 @@ public struct Game {
         self.capturedPieces = capturedPieces
         sortCapturedPieces()
     }
+
+    public init(sfen: SFEN) {
+        self.init(
+            board: sfen.board,
+            color: sfen.color,
+            capturedPieces: sfen.capturedPieces
+        )
+    }
 }
 
 extension Game {

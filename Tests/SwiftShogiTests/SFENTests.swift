@@ -5,10 +5,10 @@ final class SFENTests: XCTestCase {
     func testInitializer() {
         XCTAssertNil(SFEN(string: "4k4/9/9/9/9/9/9/9/4K4"))
 
-        let sfen = SFEN(string: "4k4/9/9/9/9/9/9/9/4K4 b G")!
+        let sfen = SFEN(string: "4k4/9/9/9/9/9/9/9/4K4 w G")!
         XCTAssertEqual(sfen.board[.fiveA], Piece(kind: .king, color: .white))
         XCTAssertEqual(sfen.board[.fiveI], Piece(kind: .king, color: .black))
-        XCTAssertEqual(sfen.color, .black)
+        XCTAssertEqual(sfen.color, .white)
         XCTAssertEqual(sfen.capturedPieces, [Piece(kind: .gold, color: .black)])
     }
 }

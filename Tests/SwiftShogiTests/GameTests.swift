@@ -2,6 +2,15 @@ import XCTest
 @testable import SwiftShogi
 
 final class GameTests: XCTestCase {
+    func testInitializerWithSFEN() {
+        let sfen = SFEN(string: "4k4/9/9/9/9/9/9/9/4K4 w G")!
+        let game = Game(sfen: sfen)
+        XCTAssertEqual(game.board[.fiveA], Piece(kind: .king, color: .white))
+        XCTAssertEqual(game.board[.fiveI], Piece(kind: .king, color: .black))
+        XCTAssertEqual(game.color, .white)
+        XCTAssertEqual(game.capturedPieces, [Piece(kind: .gold, color: .black)])
+    }
+
     func testPerformFromBoard() {
         let piece = Piece(kind: .gold, color: .black)
         let board = Board(pieces: [.oneA: piece])
