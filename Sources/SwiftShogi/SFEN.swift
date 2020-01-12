@@ -84,15 +84,24 @@ extension SFEN.Fields {
         }
 
         var hasPrefix = false
+        var numberOfPieces = 1
         for (index, character) in Array(capturedPiecesString).enumerated() {
             let isLast = index == capturedPiecesString.count - 1
-            if !isLast && !hasPrefix && character == SFEN.promotionPrefix {
+            switch character {
+            case _ where SFEN.pieceCharacters.contains(character) || hasPrefix || numberOfPieces > 1:
+                guard let piece = Piece(character: character, isPromoted: hasPrefix) else { return nil }
+                (0 ..< numberOfPieces).forEach { _ in
+                    pieces.append(piece)
+                }
+                hasPrefix = false
+                numberOfPieces = 1
+            case SFEN.promotionPrefix where !isLast:
                 hasPrefix = true
-                continue
+            case _ where SFEN.digitCharacters.contains(character) && !isLast:
+                numberOfPieces = Int(String(character))!
+            default:
+                return nil
             }
-            guard let piece = Piece(character: character, isPromoted: hasPrefix) else { return nil }
-            pieces.append(piece)
-            hasPrefix = false
         }
         return pieces
     }

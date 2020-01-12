@@ -55,14 +55,22 @@ final class SFENComponentsTests: XCTestCase {
             ("-", []),
             ("Pp", [
                 Piece(kind: .pawn(.normal), color: .black),
-                Piece(kind: .pawn(.normal), color: .white)]
-            ),
+                Piece(kind: .pawn(.normal), color: .white)
+            ]),
+            ("2P2p", [
+                Piece(kind: .pawn(.normal), color: .black),
+                Piece(kind: .pawn(.normal), color: .black),
+                Piece(kind: .pawn(.normal), color: .white),
+                Piece(kind: .pawn(.normal), color: .white)
+            ]),
             ("+P+p", [
                 Piece(kind: .pawn(.promoted), color: .black),
-                Piece(kind: .pawn(.promoted), color: .white)]
-            ),
+                Piece(kind: .pawn(.promoted), color: .white)
+            ]),
             ("+P++p", nil),
+            ("+P22p", nil),
             ("Pp+", nil),
+            ("Pp2", nil),
             ("z", nil),
         ]
         strings.forEach {
