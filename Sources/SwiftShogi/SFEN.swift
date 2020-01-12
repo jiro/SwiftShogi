@@ -3,6 +3,8 @@
 /// - SeeAlso:
 /// [SFEN (Wikipedia)](https://en.wikipedia.org/wiki/Shogi_notation#SFEN)
 public struct SFEN {
+    public static let `default` = Self(string: "lnsgkgsnl/1r5b1/ppppppppp/9/9/9/PPPPPPPPP/1B5R1/LNSGKGSNL b -")!
+
     public let board: Board
     public let color: Color
     public let capturedPieces: [Piece]
