@@ -1,5 +1,5 @@
 /// A shogi board used to map `Square`s to `Piece`s.
-public struct Board {
+public struct Board: Equatable {
     private var pieceBitboards: [Piece: Bitboard]
 
     /// Creates a shogi board.

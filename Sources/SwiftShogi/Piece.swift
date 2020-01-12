@@ -96,6 +96,22 @@ extension Piece {
         }
         return Set(attacks)
     }
+
+    init?(character: Character, isPromoted: Bool) {
+        let state: State = isPromoted ? .promoted : .normal
+        switch character.lowercased() {
+        case "p": self.kind = .pawn(state)
+        case "l": self.kind = .lance(state)
+        case "n": self.kind = .knight(state)
+        case "s": self.kind = .silver(state)
+        case "g": self.kind = .gold
+        case "b": self.kind = .bishop(state)
+        case "r": self.kind = .rook(state)
+        case "k": self.kind = .king
+        default: return nil
+        }
+        self.color = character.isUppercase ? .black : .white
+    }
 }
 
 private extension Piece {

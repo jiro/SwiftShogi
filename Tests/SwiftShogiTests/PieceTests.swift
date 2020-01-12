@@ -223,4 +223,23 @@ final class PieceTests: XCTestCase {
             XCTAssertEqual($0.piece.attacks, Set($0.expectedArray))
         }
     }
+
+    func testInitializerWithCharacter() {
+        let characters: [(character: Character, isPromoted: Bool, expected: Piece?)] = [
+            (Character("P"), false, Piece(kind: .pawn(.normal), color: .black)),
+            (Character("L"), false, Piece(kind: .lance(.normal), color: .black)),
+            (Character("N"), false, Piece(kind: .knight(.normal), color: .black)),
+            (Character("S"), false, Piece(kind: .silver(.normal), color: .black)),
+            (Character("G"), false, Piece(kind: .gold, color: .black)),
+            (Character("B"), false, Piece(kind: .bishop(.normal), color: .black)),
+            (Character("R"), false, Piece(kind: .rook(.normal), color: .black)),
+            (Character("K"), false, Piece(kind: .king, color: .black)),
+            (Character("P"), true, Piece(kind: .pawn(.promoted), color: .black)),
+            (Character("p"), false, Piece(kind: .pawn(.normal), color: .white)),
+            (Character("z"), false, nil),
+        ]
+        characters.forEach {
+            XCTAssertEqual(Piece(character: $0.character, isPromoted: $0.isPromoted), $0.expected)
+        }
+    }
 }
