@@ -35,6 +35,10 @@ public enum Square: Int, CaseIterable {
 }
 
 extension Square {
+    public init(file: File, rank: Rank) {
+        self = Self.allCases.first { $0.file == file && $0.rank == rank }!
+    }
+
     public var file: File { File(rawValue: rawValue / File.allCases.count)! }
     public var rank: Rank { Rank(rawValue: rawValue % Rank.allCases.count)! }
 

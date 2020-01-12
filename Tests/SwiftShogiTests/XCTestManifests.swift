@@ -117,6 +117,7 @@ extension SquareTests {
     static let __allTests__SquareTests = [
         ("testFile", testFile),
         ("testFileCases", testFileCases),
+        ("testInitializer", testInitializer),
         ("testPromotableCases", testPromotableCases),
         ("testRank", testRank),
         ("testRankCases", testRankCases),

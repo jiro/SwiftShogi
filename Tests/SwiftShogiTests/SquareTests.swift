@@ -2,6 +2,11 @@ import XCTest
 @testable import SwiftShogi
 
 final class SquareTests: XCTestCase {
+    func testInitializer() {
+        let square = Square(file: .one, rank: .a)
+        XCTAssertEqual(square, Square.oneA)
+    }
+
     func testFile() {
         let square = Square.oneA
         XCTAssertEqual(square.file, File.one)
