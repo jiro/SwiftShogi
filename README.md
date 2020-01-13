@@ -29,6 +29,12 @@ SwiftShogi is a pure Swift shogi library with game management, bitboard-based bo
 - [ ] KIF parsing
 - [ ] Pretty printing
 
+## Example
+
+To understand how to develop apps using SwiftShogi, you can refer to the following app.
+
+- [SwiftUIShogi](https://github.com/hedjirog/SwiftUIShogi) \- An example shogi app using SwiftUI
+
 ## Usage
 
 Initialize a game with [SFEN](https://en.wikipedia.org/wiki/Shogi_notation#SFEN):
