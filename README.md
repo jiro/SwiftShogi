@@ -17,3 +17,40 @@
         <img src="https://img.shields.io/badge/twitter-@hedjirog-blue.svg?style=flat" alt="Twitter: @hedjirog" />
     </a>
 </p>
+
+## Features
+
+- [x] Game management
+- [x] Board representation
+- [x] Move generation / validation
+- [x] SFEN parsing
+- [ ] KIF parsing
+- [ ] Pretty printing
+
+## Installation
+
+Add the SwiftShogi package to your target dependencies in `Package.swift`:
+
+```swift
+import PackageDescription
+
+let package = Package(
+    name: "YourProject",
+    dependencies: [
+        .package(
+            url: "https://github.com/hedjirog/SwiftShogi",
+            from: "0.1.0"
+        ),
+    ]
+)
+```
+
+Then run the `swift build` command to build your project.
+
+## License
+
+MIT
+
+## Contact
+
+Jiro Nagashima ([@hedjirog](https://twitter.com/hedjirog))
