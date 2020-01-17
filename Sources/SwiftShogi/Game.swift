@@ -37,24 +37,18 @@ extension Game {
         case capturedPieceDoesNotExist
         case invalidPieceColor
         case friendlyPieceAlreadyExists
-        case illegalAttack
-        case kingPieceIsChecked
-        case pieceAlreadyPromoted
         case pieceCannotPromote
         case illegalBoardPiecePromotion
         case illegalCapturedPiecePromotion
+        case illegalAttack
+        case kingPieceIsChecked
+        case pieceAlreadyPromoted
     }
 
     /// Validates `move`.
     public func validate(_ move: Move) throws {
         try validateSource(move.source, piece: move.piece)
         try validateDestination(move.destination)
-        try validateAttack(
-            source: move.source,
-            destination: move.destination,
-            piece: move.piece
-        )
-
         if move.shouldPromote {
             try validatePromotion(
                 source: move.source,
@@ -62,6 +56,11 @@ extension Game {
                 piece: move.piece
             )
         }
+        try validateAttack(
+            source: move.source,
+            destination: move.destination,
+            piece: move.piece
+        )
     }
 
     /// Returns the valid moves for the current color.
@@ -151,22 +150,6 @@ private extension Game {
         }
     }
 
-    func validateAttack(source: Move.Source, destination: Move.Destination, piece: Piece) throws {
-        switch (source, destination, piece) {
-        case let (.board(sourceSquare), .board(destinationSquare), _):
-            guard board.isAttackable(from: sourceSquare, to: destinationSquare) else {
-                throw MoveValidationError.illegalAttack
-            }
-            guard !board.isKingCheckedByMovingPiece(from: sourceSquare, to: destinationSquare, for: color) else {
-                throw MoveValidationError.kingPieceIsChecked
-            }
-        case let (.capturedPiece, .board(destinationSquare), piece):
-            guard !board.isKingCheckedByMovingPiece(piece, to: destinationSquare, for: color) else {
-                throw MoveValidationError.kingPieceIsChecked
-            }
-        }
-    }
-
     func validatePromotion(source: Move.Source, destination: Move.Destination, piece: Piece) throws {
         guard !piece.isPromoted else {
             throw MoveValidationError.pieceAlreadyPromoted
@@ -183,6 +166,22 @@ private extension Game {
             }
         case (.capturedPiece, _):
             throw MoveValidationError.illegalCapturedPiecePromotion
+        }
+    }
+
+    func validateAttack(source: Move.Source, destination: Move.Destination, piece: Piece) throws {
+        switch (source, destination, piece) {
+        case let (.board(sourceSquare), .board(destinationSquare), _):
+            guard board.isAttackable(from: sourceSquare, to: destinationSquare) else {
+                throw MoveValidationError.illegalAttack
+            }
+            guard !board.isKingCheckedByMovingPiece(from: sourceSquare, to: destinationSquare, for: color) else {
+                throw MoveValidationError.kingPieceIsChecked
+            }
+        case let (.capturedPiece, .board(destinationSquare), piece):
+            guard !board.isKingCheckedByMovingPiece(piece, to: destinationSquare, for: color) else {
+                throw MoveValidationError.kingPieceIsChecked
+            }
         }
     }
 
