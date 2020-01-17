@@ -13,5 +13,8 @@ let package = Package(
         .testTarget(
             name: "SwiftShogiTests",
             dependencies: ["SwiftShogi"]),
+        .testTarget(
+            name: "PerformanceTests",
+            dependencies: ["SwiftShogi"]),
     ]
 )
