@@ -13,10 +13,10 @@ extension Board {
     /// Gets and sets a piece at `square`.
     public subscript(square: Square) -> Piece? {
         get {
-            allPieces.first { exists($0, at: square) }
+            pieceBitboards.keys.first { exists($0, at: square) }
         }
         set(piece) {
-            allPieces.forEach { remove($0, from: square) }
+            pieceBitboards.keys.forEach { remove($0, from: square) }
             if let piece = piece {
                 insert(piece, to: square)
             }
@@ -73,8 +73,6 @@ extension Board {
 }
 
 private extension Board {
-    var allPieces: [Piece] { Array(pieceBitboards.keys) }
-
     func exists(_ piece: Piece, at square: Square) -> Bool {
         pieceBitboards[piece]![square]
     }
