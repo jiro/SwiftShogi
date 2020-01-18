@@ -1,14 +1,24 @@
 name: CI
-on: [push]
+on: push
+env:
+  CONFIGURATION: release
 jobs:
   test-mac:
-    runs-on: macOS-latest
+    strategy:
+      matrix:
+        test: [SwiftShogiTests, PerformanceTests]
+    runs-on: macos-latest
     steps:
-    - uses: actions/checkout@v1
-    - run: swift test
+    - uses: actions/checkout@v2
+    - name: swift test
+      run: swift test -c $CONFIGURATION -Xswiftc -enable-testing --filter ${{ matrix.test }}
   test-linux:
-    container: swift:5.1-bionic
+    strategy:
+      matrix:
+        test: [SwiftShogiTests, PerformanceTests]
     runs-on: ubuntu-latest
+    container: swift:5.1-bionic
     steps:
-    - uses: actions/checkout@v1
-    - run: swift test
+    - uses: actions/checkout@v2
+    - name: swift test
+      run: swift test -c $CONFIGURATION -Xswiftc -enable-testing --filter ${{ matrix.test }}
