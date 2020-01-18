@@ -42,17 +42,12 @@ extension Board {
 
     /// Returns the occupied squares corresponding to `color`.
     public func occupiedSquares(for color: Color? = nil) -> [Square] {
-        let bitboard = occupiedBitboard { piece in
-            guard let color = color else { return true }
-            return piece.color == color
-        }
-        return bitboard.squares
+        occupiedBitboard(for: color).squares
     }
 
     /// Returns the empty squares.
     public var emptySquares: [Square] {
-        let bitboard = ~occupiedBitboard()
-        return bitboard.squares
+        (~occupiedBitboard()).squares
     }
 
     /// Returns `true` if the king for `color` is in check.
@@ -106,13 +101,11 @@ private extension Board {
         return Bitboard.attacks(from: square, piece: piece, stoppers: occupiedBitboard())
     }
 
-    func occupiedBitboard(where predicate: ((Piece) -> Bool)? = nil) -> Bitboard {
-        pieceBitboards
-            .filter { piece, _ in
-                guard let predicate = predicate else { return true }
-                return predicate(piece)
-            }
-            .values
-            .reduce(Bitboard(rawValue: 0), |)
+    func occupiedBitboard(for color: Color? = nil) -> Bitboard {
+        var pieceBitboards = self.pieceBitboards
+        if let color = color {
+            pieceBitboards = pieceBitboards.filter { piece, _ in piece.color == color }
+        }
+        return pieceBitboards.values.reduce(Bitboard(rawValue: 0), |)
     }
 }
