@@ -65,20 +65,20 @@ extension Game {
 
     /// Returns the valid moves for the current color.
     public func validMoves() -> [Move] {
-        let moves = movesFromBoard + movesFromCapturedPieces
-        return moves.filter {
-            do {
-                try self.validate($0)
-                return true
-            } catch {
-                return false
-            }
-        }
+        (movesFromBoard + movesFromCapturedPieces).filter(isValid)
     }
 
     /// Returns the valid moves of `piece` from `source`.
     public func validMoves(from source: Move.Source, piece: Piece) -> [Move] {
-        validMoves().filter { $0.source == source && $0.piece == piece }
+        let moves: [Move] = {
+            switch source {
+            case let .board(square):
+                return boardPieceMoves(for: piece, from: square)
+            case .capturedPiece:
+                return capturedPieceMoves(for: piece)
+            }
+        }()
+        return moves.filter(isValid)
     }
 }
 
@@ -182,6 +182,15 @@ private extension Game {
             guard !board.isKingCheckedByMovingPiece(piece, to: destinationSquare, for: color) else {
                 throw MoveValidationError.kingPieceIsChecked
             }
+        }
+    }
+
+    func isValid(for move: Move) -> Bool {
+        do {
+            try validate(move)
+            return true
+        } catch {
+            return false
         }
     }
 
