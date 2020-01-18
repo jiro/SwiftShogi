@@ -34,9 +34,9 @@ extension Board {
     }
 
     /// Returns the attackable squares to `square` corresponding to `color`.
-    public func attackableSquares(to square: Square, for color: Color? = nil) -> [Square] {
-        occupiedSquares(for: color).filter { occupiedSquare in
-            attacksBitboard(from: occupiedSquare).squares.contains(square)
+    public func attackableSquares(to destinationSquare: Square, for color: Color? = nil) -> [Square] {
+        occupiedSquares(for: color).filter { sourceSquare in
+            isAttackable(from: sourceSquare, to: destinationSquare)
         }
     }
 
