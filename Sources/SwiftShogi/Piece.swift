@@ -89,13 +89,7 @@ extension Piece {
         let isFarReaching: Bool
     }
 
-    var attacks: Set<Attack> {
-        let directions = farReachingDirections
-        let attacks = attackableDirections.map {
-            Attack(direction: $0, isFarReaching: directions.contains($0))
-        }
-        return Set(attacks)
-    }
+    var attacks: Set<Attack> { Self.pieceAttacks[self]! }
 
     init?(character: Character, isPromoted: Bool) {
         let state: State = isPromoted ? .promoted : .normal
@@ -115,6 +109,18 @@ extension Piece {
 }
 
 private extension Piece {
+    static let pieceAttacks: [Self: Set<Attack>] = Dictionary(uniqueKeysWithValues: piecesAndAttacks)
+
+    static var piecesAndAttacks: [(Self, Set<Attack>)] {
+        allCases.map { piece in
+            let directions = piece.farReachingDirections
+            let attacks = piece.attackableDirections.map {
+                Attack(direction: $0, isFarReaching: directions.contains($0))
+            }
+            return (piece, Set(attacks))
+        }
+    }
+
     var attackableDirections: [Direction] {
         let directions: [Direction] = {
             switch kind {
