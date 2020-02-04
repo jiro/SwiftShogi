@@ -10,12 +10,16 @@ jobs:
     - uses: actions/checkout@v2
     - name: Test
       run: swift test -c $CONFIGURATION -Xswiftc -enable-testing --enable-code-coverage --filter ${{ matrix.test }}
+    - name: Convert instrprof file format
+      if: matrix.test == 'SwiftShogiTests'
+      run: xcrun llvm-cov export .build/release/SwiftShogiPackageTests.xctest/Contents/MacOS/SwiftShogiPackageTests \
+        -instr-profile .build/release/codecov/default.profdata \
+        -format="lcov" > info.lcov
     - name: Upload coverage
       if: matrix.test == 'SwiftShogiTests'
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
-        file: ./.build/release/codecov/SwiftShogi.json
   test-linux:
     strategy:
       matrix:
