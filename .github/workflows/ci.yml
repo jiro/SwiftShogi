@@ -1,7 +1,5 @@
 name: CI
 on: push
-env:
-  CONFIGURATION: release
 jobs:
   test-mac:
     strategy:
@@ -10,8 +8,13 @@ jobs:
     runs-on: macos-latest
     steps:
     - uses: actions/checkout@v2
-    - name: swift test
-      run: swift test -c $CONFIGURATION -Xswiftc -enable-testing --filter ${{ matrix.test }}
+    - name: Test
+      run: swift test -c $CONFIGURATION -Xswiftc -enable-testing --enable-code-coverage --filter ${{ matrix.test }}
+    - name: Upload coverage
+      if: matrix.test == 'SwiftShogiTests'
+      uses: codecov/codecov-action@v1
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
   test-linux:
     strategy:
       matrix:
@@ -20,5 +23,7 @@ jobs:
     container: swift:5.1-bionic
     steps:
     - uses: actions/checkout@v2
-    - name: swift test
+    - name: Test
       run: swift test -c $CONFIGURATION -Xswiftc -enable-testing --filter ${{ matrix.test }}
+env:
+  CONFIGURATION: release
