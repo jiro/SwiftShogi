@@ -15,6 +15,7 @@ jobs:
       uses: codecov/codecov-action@v1
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
+        file: ./.build/release/codecov/SwiftShogi.json
   test-linux:
     strategy:
       matrix:
