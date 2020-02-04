@@ -12,9 +12,7 @@ jobs:
       run: swift test -c $CONFIGURATION -Xswiftc -enable-testing --enable-code-coverage --filter ${{ matrix.test }}
     - name: Convert instrprof file format
       if: matrix.test == 'SwiftShogiTests'
-      run: xcrun llvm-cov export .build/release/SwiftShogiPackageTests.xctest/Contents/MacOS/SwiftShogiPackageTests \
-        -instr-profile .build/release/codecov/default.profdata \
-        -format="lcov" > info.lcov
+      run: xcrun llvm-cov export -format="lcov" .build/release/SwiftShogiPackageTests.xctest/Contents/MacOS/SwiftShogiPackageTests -instr-profile .build/release/codecov/default.profdata > info.lcov
     - name: Upload coverage
       if: matrix.test == 'SwiftShogiTests'
       uses: codecov/codecov-action@v1
